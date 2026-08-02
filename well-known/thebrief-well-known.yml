@@ -1,0 +1,18 @@
+generated: '2026-07-21'
+method: searched
+source: https://www.thebrief.ai/.well-known/
+host: https://www.thebrief.ai
+documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+notes: >-
+  The Brief (formerly Creatopy) publishes no /.well-known/ discovery documents.
+  A verbatim /llms.txt IS published and is captured at llms/thebrief-llms.txt.

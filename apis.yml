@@ -1,8 +1,29 @@
 aid: thebrief
 name: TheBrief
-description: TheBrief is a company surfaced as a portfolio company of point-nine and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  The Brief (formerly Creatopy) is an AI-powered advertising creation platform
+  that helps brands and agencies discover, create, launch, and optimize ads at
+  scale. Its Ad Studio, AI agents (Discover, Create, Optimize), and native ad
+  server generate on-brand creatives, resize a single design into 50+ ad
+  formats, publish directly to networks like Meta, Google Ads, and Veeva, and
+  optimize campaign performance with data-backed recommendations. Founded in
+  2021 and based in Romania, The Brief is a portfolio company of Point Nine.
+  This profile documents the company's public web, marketing, and legal surface;
+  no public developer API, OpenAPI, SDK, or webhook surface has been found as of
+  this enrichment pass.
 url: https://raw.githubusercontent.com/api-evangelist/thebrief/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://cdn.sanity.io/images/8wzdrx7x/production/d9d93597b665708876d106aed92e87d0addafc41-760x175.svg
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
@@ -11,9 +32,16 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
+- Advertising
+- Creative
+- Design
+- Artificial Intelligence
+- Marketing
+- Ad Serving
+- SaaS
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -21,5 +49,34 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: TrustCenter
+  url: security/thebrief-trust-center.yml
+- type: Compliance
+  url: https://www.thebrief.ai/security/
+- type: DomainSecurity
+  url: security/thebrief-domain-security.yml
 - type: Website
-  url: https://www.creatopy.com
+  url: https://www.thebrief.ai
+- type: Blog
+  url: https://www.thebrief.ai/blog/
+- type: Pricing
+  url: https://www.thebrief.ai/pricing/
+- type: Support
+  url: https://help.thebrief.ai/
+- type: GettingStarted
+  url: https://www.thebrief.ai/learning-hub/
+- type: TermsOfService
+  url: https://www.thebrief.ai/legal-information/terms-of-use/
+- type: PrivacyPolicy
+  url: https://www.thebrief.ai/legal-information/privacy-policy/
+- type: GitHubOrganization
+  url: https://github.com/thebrief-ai
+- type: Login
+  url: https://app.thebrief.ai/
+- type: LLMsTxt
+  url: llms/thebrief-llms.txt
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 4
+  pass: local-v1
