@@ -1,0 +1,61 @@
+# The Brief Public API
+
+## The Brief Public API
+
+- [The Brief](https://docs.thebrief.ai/the-brief.md): Integration documentation
+- [Public API](https://docs.thebrief.ai/public-api.md)
+- [Authentication](https://docs.thebrief.ai/public-api/authentication.md)
+- [REST API](https://docs.thebrief.ai/public-api/rest-api.md): How to integrate The Brief using our REST API.
+- [Auth](https://docs.thebrief.ai/public-api/rest-api/auth.md)
+- [Exports](https://docs.thebrief.ai/public-api/rest-api/exports.md)
+- [Creatives](https://docs.thebrief.ai/public-api/rest-api/exports/creatives.md)
+- [Templates (Designs)](https://docs.thebrief.ai/public-api/rest-api/templates-designs.md)
+- [Elements](https://docs.thebrief.ai/public-api/rest-api/templates-designs/elements.md)
+- [Template Sizes](https://docs.thebrief.ai/public-api/rest-api/templates-designs/template-sizes.md)
+- [Font variants](https://docs.thebrief.ai/public-api/rest-api/templates-designs/font-variants.md)
+- [ShareLink](https://docs.thebrief.ai/public-api/rest-api/sharelink.md)
+- [Projects](https://docs.thebrief.ai/public-api/rest-api/projects.md)
+- [Project Users](https://docs.thebrief.ai/public-api/rest-api/projects/users.md)
+- [Brand Kits](https://docs.thebrief.ai/public-api/rest-api/brand-kits.md)
+- [Brand kit logos](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-logos.md)
+- [Brand kit logo folders](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-logos/brand-kit-logo-folders.md)
+- [Brand kit colors](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-colors.md)
+- [Brand kit fonts](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-fonts.md)
+- [Brand kit assets](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-assets.md)
+- [Brand kit asset folders](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-assets/brand-kit-asset-folders.md)
+- [Brand kit media folders](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-kit-media-folders.md)
+- [Brand templates](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-templates.md)
+- [Brand template folders](https://docs.thebrief.ai/public-api/rest-api/brand-kits/brand-templates/brand-template-folders.md)
+- [Ad Networks](https://docs.thebrief.ai/public-api/rest-api/ad-networks.md)
+- [Ad Serving](https://docs.thebrief.ai/public-api/rest-api/ad-serving.md): This page contains a documentation for each API related to Ad Serving
+- [Users](https://docs.thebrief.ai/public-api/rest-api/users.md)
+- [Team roles](https://docs.thebrief.ai/public-api/rest-api/users/team-roles.md)
+- [Webhooks](https://docs.thebrief.ai/public-api/rest-api/webhooks.md)
+- [Webhook action types](https://docs.thebrief.ai/public-api/rest-api/webhooks/webhook-action-types.md)
+- [Design Versions](https://docs.thebrief.ai/public-api/rest-api/design-versions.md)
+- [Folders](https://docs.thebrief.ai/public-api/rest-api/folders.md)
+- [Move design to folder](https://docs.thebrief.ai/public-api/rest-api/folders/move-design-to-folder.md): This endpoint is used to move a design to a specific folder.
+- [Error codes](https://docs.thebrief.ai/public-api/rest-api/error-codes.md)
+- [Designs](https://docs.thebrief.ai/public-api/rest-api/designs.md)
+- [Design Fonts](https://docs.thebrief.ai/public-api/rest-api/design-fonts.md)
+- [Credits](https://docs.thebrief.ai/public-api/rest-api/credits.md)
+- [GraphQL](https://docs.thebrief.ai/public-api/graphql.md)
+- [Endpoints and queries](https://docs.thebrief.ai/public-api/graphql/endpoints-and-queries.md)
+- [Postman Collection](https://docs.thebrief.ai/public-api/graphql/postman-collection.md)
+- [App integration](https://docs.thebrief.ai/app-integration.md): You can use the App Integration in order to integrate The Brief editor within your app, allowing you to use the full capabilities & features of our Ad Studio experience.
+- [Iframe embedding](https://docs.thebrief.ai/app-integration/iframe-embedding.md)
+- [Zapier integration](https://docs.thebrief.ai/zapier-integration.md)
+- [Setting up Zapier with The Brief](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief.md)
+- [Setting up the first zap](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/setting-up-the-first-zap.md): Initial trigger and authentication
+- [Setting up the action in your first zap (generate 1 creative)](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/setting-up-the-first-zap/setting-up-the-action-in-your-first-zap-generate-1-creative.md)
+- [Setting up the action in your first zap (generate multiple creatives)](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/setting-up-the-first-zap/setting-up-the-action-in-your-first-zap-generate-multiple-creatives.md): How to generate multiple sizes creatives from Zapier
+- [Setting up your second zap](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/setting-up-your-second-zap.md)
+- [The Brief Trigger](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/setting-up-your-second-zap/the-brief-trigger.md): Decide what to do with your newly generated creatives
+- [Webhook trigger](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/setting-up-your-second-zap/webhook-trigger.md): Decide what to do with your newly generated creatives
+- [Verify your generated creatives in app](https://docs.thebrief.ai/zapier-integration/setting-up-zapier-with-the-brief/verify-your-generated-creatives-in-app.md): Review, edit and redownload the creatives generated through Zapier
+- [Zapier use cases](https://docs.thebrief.ai/zapier-integration/zapier-use-cases.md)
+- [Generate design variations through a spreadsheet](https://docs.thebrief.ai/zapier-integration/zapier-use-cases/generate-design-variations-through-a-spreadsheet.md)
+- [Generate creatives from an e-commerce platform](https://docs.thebrief.ai/zapier-integration/zapier-use-cases/generate-creatives-from-an-e-commerce-platform.md)
+- [Send newly generated creatives to cloud storage](https://docs.thebrief.ai/zapier-integration/zapier-use-cases/send-newly-generated-creatives-to-cloud-storage.md)
+- [Send newly generated creatives to an email inbox](https://docs.thebrief.ai/zapier-integration/zapier-use-cases/send-newly-generated-creatives-to-an-email-inbox.md)
+- [Post newly generated creative on a social media platform](https://docs.thebrief.ai/zapier-integration/zapier-use-cases/post-newly-generated-creative-on-a-social-media-platform.md)

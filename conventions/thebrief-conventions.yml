@@ -1,0 +1,151 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.thebrief.ai/public-api
+docs:
+  - https://docs.thebrief.ai/public-api
+  - https://docs.thebrief.ai/public-api/rest-api
+  - https://docs.thebrief.ai/public-api/graphql/endpoints-and-queries
+  - https://docs.thebrief.ai/public-api/rest-api/error-codes
+summary: >-
+  Cross-cutting request/response semantics for The Brief Public API, read from the
+  published GitBook documentation and cross-checked against the live GraphQL schema.
+  Two co-equal surfaces sit on one data core: a versioned REST API at
+  https://api.thebrief.ai/v1 and a single GraphQL endpoint at
+  https://graphql.thebrief.ai/public. Idempotency is NOT documented on either surface —
+  do not assume it.
+
+surfaces:
+  - style: rest
+    base_url: https://api.thebrief.ai/v1
+    versioning: path segment (/v1)
+    content_type: application/json
+  - style: graphql
+    endpoint: https://graphql.thebrief.ai/public
+    methods: [POST]
+    content_type: application/json
+    introspection: open (anonymous __schema returns 200; execution requires a bearer token)
+    note: >-
+      GET on the GraphQL endpoint returns 400 with a CSRF-prevention error
+      ("This operation has been blocked as a potential Cross-Site Request Forgery"),
+      so the server enforces the Apollo CSRF-prevention preflight.
+
+authentication:
+  style: jwt_bearer
+  header: Authorization
+  value: 'Bearer <jwt>'
+  token_endpoint: https://api.thebrief.ai/v1/auth/token
+  see: authentication/thebrief-authentication.yml
+
+response_envelope:
+  shape: single-key wrapper
+  key: response
+  note: >-
+    Every documented REST success body is wrapped in a top-level "response" object or
+    array — e.g. {"response": {"nodes": [...], "pageInfo": {...}}}. Errors are returned
+    as a top-level {"error": "<message>"} string rather than an RFC 9457 problem document.
+  examples:
+    success: '{"response": {"totalCount": 10, "nodes": [...], "pageInfo": {...}}}'
+    error: '{"error": "This endpoint is not available for teams that have a legacy plan"}'
+  rfc9457: false
+
+pagination:
+  style: cursor
+  request_params:
+    - {name: limit, type: integer, note: 'Max page size; documented maximum is 50 on designs/templates.'}
+    - {name: cursor, type: string, note: 'Opaque base64 cursor; pass the previous endCursor. URL-encode it.'}
+  response_fields:
+    container: nodes
+    total: totalCount
+    page_info: pageInfo
+    page_info_fields:
+      - {name: hasNextPage, type: boolean, description: Whether there are more items after the current page.}
+      - {name: endCursor, type: string, description: Cursor pointing to the last item in current results.}
+  note: >-
+    Relay-style connection shape on both surfaces — the REST list endpoints return the same
+    nodes/pageInfo envelope the GraphQL PageInfo type defines. Cursors are base64 JSON
+    (observed form {"limit":50,"lastId":3134242} / {"createdAt":1735566550033}) and are opaque;
+    do not construct them.
+  applies_to:
+    [designs, templates, projects, brandkits, brandKitMedia, brandKitLogos, users, downloads, folders]
+
+filtering_and_sorting:
+  search_param: keyword
+  exact_match_param: exactSearch
+  scoping_params: [projectId, folderId, brandkitId, teamId, apiGenerated, onlyTemplates]
+  order_by:
+    param: orderBy
+    values: [ID, NAME, CREATED_AT, UPDATED_AT]
+  order_direction:
+    param: orderDirection
+    values: [ASC, DESC]
+
+field_selection:
+  rest: not supported (fixed response shapes)
+  graphql: arbitrary field selection; unions (DownloadCreativeDesign / DownloadCreativeSet) resolved via __typename + inline fragments
+
+identifiers:
+  design_and_template: >-
+    Short opaque alphanumeric "hash" strings (e.g. 3pqqql, zdow6r, lpp55x) used as
+    {templateHash} / {design_hash} path parameters.
+  export_and_creative: UUID v4 (e.g. b46adaed-39df-41a2-89e5-beb870282414)
+  numeric_ids: project, folder, brandkit, user, team, webhook and webhook-action ids are integers
+  credentials: clientId and clientSecret are UUIDs
+
+async_operations:
+  model: submit-then-poll (with optional webhook callback)
+  note: >-
+    Exports are asynchronous. POST /v1/export or /v1/export-with-changes returns an export id;
+    poll GET /v1/creative/{creativeId} or the GraphQL export/download queries for status, or
+    supply webhookUrl on the export request to be called back on completion.
+  status_values: [pending, inProgress, complete, completeWithError, failed]
+  callback_param: webhookUrl
+
+idempotency:
+  documented: false
+  header: null
+  note: >-
+    No Idempotency-Key header, no idempotent-retry semantics and no request-deduplication
+    guarantee appear anywhere in the published documentation or in the GraphQL schema. Export
+    and creative-generation mutations are therefore NOT safe to blind-retry — a retried
+    POST /v1/export-with-changes creates an additional design and consumes additional credits.
+    Recorded as an honest absence; no Idempotency pointer is emitted for this provider.
+
+rate_limiting:
+  documented: true
+  see: rate-limits/thebrief-rate-limits.yml
+  summary: 15 requests / 10 seconds / team on export routes; 100 requests / 10 seconds / team elsewhere.
+  response_headers:
+    documented: false
+    note: >-
+      The docs state the numeric limits but do NOT document any RateLimit-* / X-RateLimit-* /
+      Retry-After response headers, so an agent cannot read remaining budget at runtime.
+  exhaustion_status: 429
+
+request_tracing:
+  request_id_header: null
+  documented: false
+
+metering:
+  model: credits
+  note: >-
+    API work consumes team credits. GET /v1/credits/subscription-info returns the credit
+    balance (recurring / rolling / top-up, available / locked / consumed) and
+    GET /v1/credits/operations lists each operation's credit cost, so cost can be read
+    before an operation is invoked.
+  legacy_plan_gate: >-
+    Credits endpoints return 400 for teams on a legacy plan
+    ("This endpoint is not available for teams that have a legacy plan").
+
+versioning:
+  scheme: path
+  current: v1
+  see: lifecycle/thebrief-lifecycle.yml
+
+cross_links:
+  authentication: authentication/thebrief-authentication.yml
+  errors: errors/thebrief-error-codes.yml
+  rate_limits: rate-limits/thebrief-rate-limits.yml
+  lifecycle: lifecycle/thebrief-lifecycle.yml
+  webhooks: asyncapi/thebrief-webhooks.yml
+  data_model: data-model/thebrief-data-model.yml
+  graphql: graphql/thebrief-public.graphql

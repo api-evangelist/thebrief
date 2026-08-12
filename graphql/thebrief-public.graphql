@@ -1,0 +1,2280 @@
+# The Brief — Public GraphQL API schema (SDL)
+# generated: '2026-08-12'
+# method: probed
+# source: https://graphql.thebrief.ai/public (anonymous GraphQL introspection, HTTP 200)
+# note: Rendered verbatim from the live introspection response saved alongside this file as
+#       thebrief-public-introspection.json. Introspection is OPEN and unauthenticated on
+#       The Brief's own host graphql.thebrief.ai; executing queries requires a JWT bearer token.
+#       Nothing in this document is authored by API Evangelist — every type, field, argument and
+#       description is emitted from the provider's own __schema response.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"""Click target options for ad tags"""
+enum AdTagClickTarget {
+  """Open in new window/tab"""
+  _blank
+  """Open in top-level window"""
+  _top
+}
+
+"""Supported formats for ad tag file generation"""
+enum AdTagCodeFormat {
+  """Excel spreadsheet format"""
+  XLSX
+  """Comma-separated values format"""
+  CSV
+}
+
+"""Breakdown dimensions for ad tag reports"""
+enum AdTagReportBreakdown {
+  """Break down by project"""
+  project
+  """Break down by day"""
+  date_daily
+  """Break down by design"""
+  design
+  """Break down by ad network"""
+  network
+  """Break down by design size"""
+  design_size
+  """Break down by month"""
+  date_monthly
+  """Break down by feed variation"""
+  feed_variation
+}
+
+enum ApiRequestTypesEnum {
+  GenerateCreative
+  ExportCreative
+  CreateBrandKit
+  GenerateSharelink
+  CreateProject
+  DeleteProject
+  CreateTeamUser
+  DeleteTeamUser
+  CreateTeamWebhook
+  UpdateTeamWebhook
+  DeleteTeamWebhook
+  DeleteDesign
+  UpdateVersionName
+  AddVersion
+  RestoreVersion
+  UpdateProject
+  AddProjectUser
+  RemoveProjectUser
+  DeleteBrandKit
+  RenameBrandKit
+  UpdateBrandKit
+  MoveDesignToFolder
+  CreateFolder
+  RenameFolder
+  DeleteFolder
+  Download
+  Export
+  Creative
+  Downloads
+  DownloadsByPipeline
+  Templates
+  TemplateElements
+  Sharelink
+  BrandKits
+  BrandKit
+  Projects
+  BrandkitMedia
+  TeamUsers
+  DesignVersionsHistory
+  DesignSizes
+  ProjectUsers
+  Folders
+  UpdateTeamUserRole
+  BrandkitMediaFolders
+  BrandKitFolders
+  BrandKitTemplateFolders
+  UploadAssets
+  UploadLogo
+  TemplateElementFontData
+  Designs
+  BrandTemplates
+  AdTagEnable
+  AdTagDisable
+  AdTagUpdateSettings
+  AdTagGenerateFile
+  AdTagGenerateCode
+  GetSubscriptionInfo
+  GetTeamConsumptionReport
+  CreateBrandKitColorPalette
+  UpdateBrandKitColorPalette
+  DeleteBrandKitColorPalette
+  DeleteBrandKitFont
+  UploadBrandKitFont
+  CreateBrandKitLogoFolder
+  CreateBrandKitAssetFolder
+  CreateBrandKitTemplateFolder
+  RenameBrandKitLogoFolder
+  DeleteBrandKitLogoFolder
+  RenameBrandKitAssetFolder
+  DeleteBrandKitAssetFolder
+  RenameBrandKitTemplateFolder
+  DeleteBrandKitTemplateFolder
+  BrandKitLogos
+}
+
+"""Available scopes for API tokens"""
+enum ApiTokenScope {
+  """Access to Creatopy API"""
+  CREATOPY_API
+  """Access to Figma plugin"""
+  FIGMA
+  """Access to Zapier integration"""
+  ZAPIER
+}
+
+"""Supported file formats for comment attachments"""
+enum CommentAttachmentFormat {
+  jpg
+  jpeg
+  png
+  svg
+  wav
+  ogg
+  mpeg
+  mp4
+  mp3
+  avchd
+  avi
+  mkv
+  mov
+  webm
+  wmv
+  mts
+}
+
+"""Processing status of comment attachments"""
+enum CommentAttachmentStatus {
+  """Attachment is valid and ready"""
+  VALID
+  """Attachment is being processed"""
+  PROCESSING
+  """Error occurred processing attachment"""
+  ERROR
+}
+
+"""Types of attachments that can be added to comments"""
+enum CommentAttachmentType {
+  """Image attachment"""
+  IMAGE
+  """Video attachment"""
+  VIDEO
+  """Audio attachment"""
+  AUDIO
+}
+
+"""Access level for comment threads"""
+enum CommentThreadAccess {
+  """Comment thread is publicly accessible"""
+  public
+  """Comment thread is only accessible to editors"""
+  editors
+}
+
+"""Types of comment thread hotspots for design collaboration"""
+enum CommentThreadHotspotType {
+  """Pin-point comment marker"""
+  pin
+  """Rectangular area comment marker"""
+  rectangle
+  """Arrow-shaped comment marker"""
+  arrow
+}
+
+"""Source of the download request for tracking purposes"""
+enum DownloadSource {
+  """Request originated from the public API"""
+  publicapi
+  """Request originated from Zapier integration"""
+  zapier
+}
+
+"""Status of a download/export operation"""
+enum DownloadStatus {
+  """Export is queued and waiting to start"""
+  pending
+  """Export is currently being processed"""
+  inProgress
+  """Export completed successfully"""
+  complete
+  """Export completed but with some errors"""
+  completeWithError
+  """Export failed completely"""
+  failed
+}
+
+"""Available export/download formats"""
+enum DownloadType {
+  """MP4 video format"""
+  mp4
+  """GIF animated image format"""
+  gif
+  """PNG static image format"""
+  png
+  """JPG static image format"""
+  jpg
+  """HTML5 interactive format"""
+  html
+  """PDF document format"""
+  pdf
+  """AMP (Accelerated Mobile Pages) format"""
+  amp
+  """WebP image format"""
+  webp
+  """HTML_NEXT"""
+  html_next
+  """HTML_CUSTOM_NETWORK"""
+  html_custom_network
+  """Layered Photoshop (PSD) format"""
+  psd
+}
+
+"""Defines which attribute of a design element can be modified"""
+enum ElementAttributeChange {
+  """Button or text content - modifies the text/label displayed"""
+  LABEL
+  """Image or Video source for this element - changes the media URL"""
+  SOURCE
+  """Embed HTML code for embed elements"""
+  CODE
+  """Layer Visibility - shows or hides the element"""
+  VISIBILITY
+  """Background color for the entire design canvas"""
+  GENERAL_BACKGROUND_COLOR
+  """Text font weight and style (e.g., bold, italic)"""
+  FONTVARIANT
+  """Text color for text elements"""
+  TEXTCOLOR
+  """Background color for shapes and buttons"""
+  BGCOLOR
+  """SVG element colors - allows changing multiple colors in SVG graphics"""
+  SVGCOLORS
+  """Text content with markdown formatting support"""
+  TEXTMARKDOWN
+  """Text with HTML formatting"""
+  TEXTHTML
+  """Line height spacing for text elements"""
+  LINEHEIGHT
+  """Letter spacing (tracking) for text elements"""
+  LETTERSPACING
+  """Text font family"""
+  FONTFAMILY
+}
+
+"""Font style attributes for text elements"""
+enum ElementFontAttributeChange {
+  """Italic font style"""
+  italic
+  """Normal (non-italic) font style"""
+  normal
+}
+
+"""GIF quality presets for GIF exports"""
+enum GifPreset {
+  """Static GIF (single frame)"""
+  static
+  """Optimized for smaller file size"""
+  optimized
+  """High quality with larger file size"""
+  highQuality
+}
+
+"""Units of measurement for design dimensions"""
+enum MeasureUnit {
+  """Centimeters"""
+  cm
+  """Inches"""
+  in
+  """Millimeters"""
+  mm
+  """Pixels"""
+  px
+}
+
+"""Folder type — distinguishes logo folders from asset/media folders"""
+enum MediaFolderType {
+  """Asset / media folders"""
+  media
+  """Logo folders"""
+  logo
+}
+
+"""Supported media file formats"""
+enum MediaFormat {
+  jpg
+  png
+  swf
+  gif
+  svg
+  wav
+  ogg
+  mpeg
+  mp4
+  mp3
+  webm
+  mov
+  mkv
+  avi
+}
+
+"""Processing status of media files"""
+enum MediaStatus {
+  """Media file is valid and ready to use"""
+  VALID
+  """Media file is invalid or corrupted"""
+  INVALID
+  """Media file is being processed"""
+  PROCESSING
+  """Error occurred while processing media file"""
+  ERROR
+}
+
+"""Types of media files supported"""
+enum MediaType {
+  """Image files (JPG, PNG, GIF, etc.)"""
+  IMAGE
+  """Video files (MP4, MOV, etc.)"""
+  VIDEO
+  """Audio files (MP3, WAV, etc.)"""
+  AUDIO
+  """Adobe Photoshop files"""
+  PHOTOSHOP
+}
+
+"""Fields available for sorting query results"""
+enum OrderBy {
+  """Sort by unique identifier"""
+  ID
+  """Sort by name/title"""
+  NAME
+  """Sort by creation date"""
+  CREATED_AT
+  """Sort by last modification date"""
+  UPDATED_AT
+}
+
+"""Sort direction for query results"""
+enum OrderDirection {
+  """Ascending order (A-Z, 0-9, oldest first)"""
+  ASC
+  """Descending order (Z-A, 9-0, newest first)"""
+  DESC
+}
+
+"""Status of Figma import processing"""
+enum ParseStatus {
+  """Import completed successfully"""
+  SUCCESS
+  """Import failed"""
+  FAILED
+  """Import is still processing"""
+  PENDING
+  """Import record not found"""
+  NOT_EXISTS
+}
+
+"""PDF quality presets"""
+enum PdfPreset {
+  """Standard PDF quality"""
+  PDF_STANDARD
+  """Print-optimized PDF quality"""
+  PDF_PRINT
+}
+
+"""Color profile options for print exports"""
+enum PrintColorProfile {
+  """RGB color profile for digital use"""
+  rgb
+  """CMYK color profile for print"""
+  cmyk
+}
+
+enum PublicPermissionResource {
+  CREATIVE
+  DOWNLOAD
+  DESIGN
+  BRANDKIT
+  PROJECT
+}
+
+"""Visibility status for designs and content"""
+enum PublicStatus {
+  """Content is private and not publicly accessible"""
+  private
+  """Content is publicly accessible"""
+  public
+}
+
+"""Generic operation status indicator"""
+enum Status {
+  """Operation completed successfully"""
+  success
+  """Operation failed"""
+  fail
+}
+
+"""Link target behavior for HTML exports"""
+enum Target {
+  """Open in new window/tab"""
+  _blank
+  """Open in same frame"""
+  _self
+  """Open in parent frame"""
+  _parent
+  """Open in full window"""
+  _top
+}
+
+"""Input for general design-wide changes"""
+input GeneralChanges {
+  """Background color for the entire design (hex color code)"""
+  backgroundColor: String
+}
+
+"""Input for getting subscription information"""
+input GetSubscriptionInfoInput {
+  """Team ID to get subscription info for"""
+  teamId: Int!
+}
+
+"""Input for getting team consumption report"""
+input GetTeamConsumptionReportInput {
+  """Team ID to get consumption report for"""
+  teamId: Int!
+  """Start date for the report period (required)"""
+  startDate: Date!
+  """End date for the report period (required)"""
+  endDate: Date!
+  """Filter by specific user IDs"""
+  userIds: [Int!]
+  """Filter by specific credit operation IDs"""
+  creditOperationIds: [Int!]
+}
+
+"""Input for generating ad tag files"""
+input InputAdTagGenerateFile {
+  """Design hash to generate ad tag for"""
+  designHash: String!
+  """Output file format"""
+  format: AdTagCodeFormat!
+}
+
+input InputApiRateLimit {
+  group: String!
+  requestTimesPerDuration: Int
+  cacheDuration: Int
+}
+
+"""Input type for custom variables"""
+input InputApiVariable {
+  """Variable name"""
+  name: String!
+  """Variable value"""
+  value: String!
+}
+
+"""Require authorization header to be present and signed with the client secret of the provided client id"""
+input InputAuthorization {
+  needAdmin: Boolean
+  requiredScopes: [ApiTokenScope!]!
+}
+
+"""Input for a single color"""
+input InputBrandKitColor {
+  """Hex color code (e.g. #FF5733)"""
+  hex: String!
+  """Optional color name"""
+  name: String
+}
+
+"""Input for brand kit logo listing"""
+input InputBrandKitLogos {
+  """Brand kit identifier"""
+  brandKitId: Int!
+  """Filter to a specific logo folder"""
+  folderId: Int
+  """Number of items to retrieve (max 100)"""
+  first: Int
+  """Pagination cursor"""
+  cursor: String
+}
+
+"""Input for searching brand kit media"""
+input InputBrandKitMediaSearchOptions {
+  """Search term to filter media by name"""
+  search: String
+  """Filter by media type"""
+  mediaType: MediaType
+  """Filter by media format"""
+  mediaFormat: MediaFormat
+}
+
+"""Input for retrieving brand kit media"""
+input InputBrandMedia {
+  """Brand kit identifier"""
+  brandKitId: Int!
+  """Parent folder ID (null for root level)"""
+  parentId: Int
+  """Number of items to retrieve"""
+  first: Int
+  """Pagination cursor"""
+  cursor: String
+  """Search and filter options"""
+  searchOptions: InputBrandKitMediaSearchOptions
+}
+
+"""Input for checking if a project can receive a Figma import"""
+input InputCanImportFigmaToProject {
+  """Project ID to validate"""
+  projectId: Int!
+  """Optional Figma JSON to detect missing brandkit fonts"""
+  json: String
+}
+
+"""Input for creating a color palette on a brand kit"""
+input InputCreateBrandKitColorPalette {
+  """Optional palette name (auto-generated if omitted)"""
+  name: String
+  """Colors to add to the palette"""
+  colors: [InputBrandKitColor!]!
+}
+
+"""Input type for specifying element attribute changes"""
+input InputElementChange {
+  """The attribute to modify"""
+  attribute: ElementAttributeChange!
+  """The new value for the attribute"""
+  value: String!
+}
+
+"""Input type for specifying changes to a specific element"""
+input InputElementChanges {
+  """The name/identifier of the element to modify"""
+  elementName: String!
+  """List of attribute changes to apply to this element"""
+  changes: [InputElementChange!]!
+}
+
+"""Input type for export configuration settings"""
+input InputExportSettings {
+  """Image/video quality (0-100, higher is better quality)"""
+  quality: Int
+  """GIF quality preset selection"""
+  gifPreset: GifPreset
+  """Ad network ID for HTML exports"""
+  networkId: Int
+  """Specific slides to export (for multi-slide designs)"""
+  slides: [Int]
+  """Scale factor for export resolution"""
+  scale: Float
+  """Target frames per second for video exports"""
+  targetFPS: Int
+  """Export at retina/high-DPI resolution"""
+  retina: Boolean
+  """Export only retina version (no standard resolution)"""
+  retinaOnly: Boolean
+  """Convert custom fonts to web-safe fonts"""
+  convertCustomFonts: Boolean
+  """Minify HTML output for smaller file size"""
+  minifyHtml: Boolean
+  """Link target behavior for clickable elements"""
+  urlTarget: Target
+  """Use click tag functionality for ad serving"""
+  useAsClickTag: Boolean
+  """URL for click tag destination"""
+  clickTagUrl: String
+  """Include fallback image for HTML exports"""
+  includeFallbackImage: Boolean
+  """PDF quality preset"""
+  pdfPreset: PdfPreset
+  """Color profile for print exports"""
+  colorProfile: PrintColorProfile
+  """Only allow exporting to these size hashes"""
+  allowedSizeHashesOnly: [String]
+  """Enable responsive scaling for HTML5 exports (defaults to true when omitted)"""
+  responsiveScaling: Boolean
+  """When true, use the app's download naming convention for exported files."""
+  useAppFileNaming: Boolean
+}
+
+"""Input type for general settings"""
+input InputGeneralSettings {
+  """Project ID where new design should be created"""
+  newDesignProjectId: Int
+  """Folder ID where new design should be placed"""
+  newDesignFolderId: Int
+  """Name for the new design"""
+  newDesignName: String
+}
+
+"""Input for generating creatives from feed data"""
+input InputGenerateCreativeFeed {
+  """
+  Specifies which rows from the feed to process:
+- "0:10" - rows from 0 to 10
+- "1,3,6" - specific rows 1, 3 and 6
+- "-1" - last row only
+- "-1,-2" - last two rows (negative numbers count from end)
+  """
+  rows: String!
+}
+
+"""Input for processing Figma JSON data"""
+input InputProcessFigmaJson {
+  """Unique key for this Figma import"""
+  key: String!
+  """Project ID to import into"""
+  projectId: Int!
+  """Folder ID to place imported designs (optional)"""
+  folderId: Int
+  """Figma JSON data to process"""
+  json: JSON
+}
+
+input InputPublicAccess {
+  """Specify the starting point for resolving the team"""
+  resource: PublicPermissionResource!
+  """
+  Specifies the argument path to resolve the resource ID.
+Supports dot-path notation for nested input objects (e.g. "input.brandKitId").
+  """
+  idField: String = "id"
+}
+
+"""Input parameters for ad tag report data query"""
+input InputPublicAdTagReport {
+  """Start date for the report period"""
+  from: Date!
+  """End date for the report period"""
+  to: Date!
+  """Optional breakdown dimensions"""
+  breakdowns: [AdTagReportBreakdown]
+  """Filter by project IDs"""
+  projects: [Int]
+  """Filter by ad network IDs"""
+  networks: [Int]
+}
+
+"""Input for updating ad tag settings"""
+input InputUpdateAdTagSettings {
+  """Design hash to update settings for"""
+  designHash: String!
+  """Whether to use as click tag"""
+  useAsClickTag: Boolean
+  """Enable responsive scaling"""
+  responsiveScaling: Boolean
+  """Click destination URL"""
+  url: String
+  """Click target behavior"""
+  target: AdTagClickTarget
+  """Ad network IDs to associate with"""
+  networkIds: [Int!]
+}
+
+"""Input for updating a color palette on a brand kit"""
+input InputUpdateBrandKitColorPalette {
+  """New palette name"""
+  name: String
+  """Colors to replace the existing palette colors"""
+  colors: [InputBrandKitColor!]
+}
+
+input InputValidateRequest {
+  validationType: ApiRequestTypesEnum!
+}
+
+"""Interface for paginated query results"""
+interface PaginationResults {
+  """Total number of items available"""
+  totalCount: Int
+  """Pagination information"""
+  pageInfo: PageInfo!
+}
+
+"""A design variant within an A/B test"""
+type AbTestDesign {
+  """Unique design identifier"""
+  id: Int!
+  """Display name of the design variant"""
+  name: String!
+}
+
+"""An A/B test with its design variants"""
+type AbTestItem {
+  """Unique A/B test identifier"""
+  id: Int!
+  """Display name of the A/B test"""
+  name: String!
+  """Design variants belonging to this A/B test"""
+  designs: [AbTestDesign!]!
+}
+
+"""Account usage and limits information"""
+type AccountDetails {
+  """Maximum credits allowed for this account"""
+  creditsLimit: Float!
+  """Credits already consumed"""
+  usedCredits: Float!
+}
+
+"""Response payload for acknowledging pipeline downloads"""
+type AcknowledgeDownloadByPipelinePayload {
+  """Whether the acknowledgment was successful"""
+  result: Boolean!
+}
+
+"""Ad network configuration for HTML exports"""
+type AdNetwork {
+  """Unique ad network identifier"""
+  id: Int!
+  """Display name of the ad network"""
+  name: String!
+  """Type of ad network"""
+  type: String!
+  """Whether ad tag functionality is supported"""
+  adTag: Boolean
+  """Whether HTML5 exports are supported"""
+  html5: Boolean
+  """Whether this ad network is currently active"""
+  status: Boolean!
+  """Team-specific ad network configurations"""
+  adNetworkTeams: [AdNetworkTeam!]
+}
+
+"""Team-specific ad network configuration"""
+type AdNetworkTeam {
+  """Team identifier"""
+  teamId: Int!
+  """Ad network identifier"""
+  adNetworkId: Int!
+  """Whether this configuration is active for the team"""
+  status: Boolean!
+}
+
+"""Ad tag settings for a design"""
+type AdTagDesignSettings {
+  """Whether this design uses click tag functionality"""
+  useAsClickTag: Boolean
+  """Whether responsive scaling is enabled"""
+  responsiveScaling: Boolean
+  """Click destination URL"""
+  url: String
+  """Click target behavior"""
+  target: String
+  """Associated ad network IDs"""
+  networkIds: [Int!]
+}
+
+"""Response payload for ad tag code generation"""
+type AdTagGenerateCodePayload {
+  """Generated ad tag code"""
+  code: String!
+}
+
+"""Response payload for ad tag file generation"""
+type AdTagGenerateFilePayload {
+  """URL to download the generated file"""
+  url: String!
+}
+
+"""Response payload for adding users to projects"""
+type AddProjectUserPayload {
+  """Whether the user was successfully added"""
+  status: Status!
+}
+
+"""Response payload for adding new versions"""
+type AddVersionPayload {
+  """Whether the version was successfully added"""
+  status: Status!
+}
+
+"""Custom variable for API requests"""
+type ApiVariable {
+  """Variable name"""
+  name: String!
+  """Variable value"""
+  value: String!
+}
+
+"""One BrandKit font family with the union of weights and sub-family styles available for it"""
+type AvailableBrandKitFont {
+  """Family name as stored in the BrandKit (display-cased)"""
+  family: String!
+  """Union of numeric weights available across the family's font rows (e.g. [400, 700, 900])"""
+  weights: [Int!]!
+  """Union of sub-family / style labels available (e.g. ['Regular', 'Bold', 'Italic'])"""
+  styles: [String!]!
+}
+
+"""Brand kit containing brand assets and guidelines"""
+type BrandKit {
+  """Unique brand kit identifier"""
+  id: Int!
+  """Display name of the brand kit"""
+  name: String!
+  """Name of the brand"""
+  brandName: String
+  """Team that owns this brand kit"""
+  teamId: Int!
+  """Typography settings for this brand"""
+  typography: [Typography]
+  """User ID who created this brand kit"""
+  createdBy: Int
+  """Brand website URL"""
+  website: String
+  """Brand description"""
+  description: String
+  """Brand voice guidelines"""
+  voice: String
+  """Brand tone attributes"""
+  tone: [String!]
+  """Color palettes belonging to this brand kit"""
+  brandKitColorPalettes: [BrandKitColorPalette!]
+  """Fonts uploaded to this brand kit"""
+  fonts: [BrandKitFont!]
+}
+
+"""A single color in a brand kit palette"""
+type BrandKitColor {
+  """Hex color code (e.g. #FF5733)"""
+  hex: String!
+  """Optional color name"""
+  name: String
+}
+
+"""A named color palette within a brand kit"""
+type BrandKitColorPalette {
+  """Unique palette identifier"""
+  id: Int!
+  """Display name of the palette"""
+  name: String!
+  """Colors in this palette"""
+  colors: [BrandKitColor!]!
+}
+
+"""Font uploaded to a brand kit"""
+type BrandKitFont {
+  """Unique font identifier"""
+  id: Int!
+  """Display name of the font"""
+  name: String!
+  """Font family name"""
+  family: String!
+  """Font subfamily (Regular, Bold, Italic, etc.)"""
+  subFamily: String!
+  """Font weight (400, 700, etc.)"""
+  weight: Int!
+  """Font version string"""
+  version: String!
+  """Direct URL to the font file (e.g. .ttf asset)"""
+  fontFamilyUrl: String!
+  """URL to the @font-face CSS"""
+  fontFaceUrl: String!
+}
+
+"""Brand kit information associated with a project"""
+type BrandKitForProject {
+  """Unique brand kit identifier"""
+  id: Int!
+  """Display name of the brand kit"""
+  name: String!
+}
+
+"""Paginated list of brand kits"""
+type BrandKitList implements PaginationResults {
+  """Total number of brand kits available"""
+  totalCount: Int
+  """Brand kits in the current page"""
+  nodes: [BrandKitListItem!]!
+  """Pagination information"""
+  pageInfo: PageInfo!
+}
+
+"""Brand kit information for listing"""
+type BrandKitListItem {
+  """Unique brand kit identifier"""
+  id: Int!
+  """Display name of the brand kit"""
+  name: String!
+  """Name of the brand"""
+  brandName: String
+  """Brand website URL"""
+  website: String
+  """Brand description"""
+  description: String
+  """Brand voice guidelines"""
+  voice: String
+  """Brand tone attributes"""
+  tone: [String!]
+}
+
+"""Brand kit media container with pagination"""
+type BrandKitMediaResult {
+  """Brand kit identifier"""
+  id: Int!
+  """Brand kit name"""
+  name: String!
+  """Paginated media elements"""
+  elements: BrandMediaResults!
+}
+
+"""Response payload for brand kit operations"""
+type BrandKitPayload {
+  """The brand kit that was created or modified"""
+  brandKit: BrandKit!
+}
+
+"""Paginated results for brand kit media"""
+type BrandMediaResults implements PaginationResults {
+  """Total number of media items"""
+  totalCount: Int
+  """Pagination information"""
+  pageInfo: PageInfo!
+  """Media items in the current page"""
+  nodes: [Media!]!
+}
+
+"""Basic user information for attribution"""
+type ByUser {
+  """Unique user identifier"""
+  id: Int!
+  """Display name of the user"""
+  name: String!
+}
+
+"""Response payload for Figma import project validation"""
+type CanImportFigmaToProjectPayload {
+  """Validation errors that block the import"""
+  errors: [String!]!
+  """Font warnings (fonts used in the Figma JSON that are absent from the brandkit)"""
+  warnings: [String!]!
+  """Structured per-family / per-weight breakdown of missing fonts. Drives the 'Replace missing fonts' dialog (CRE-355)."""
+  missingFonts: [MissingFontFamily!]!
+  """All font families available in the project's BrandKit, with their weights and styles. Populates the 'Replace with' dropdowns in the dialog (CRE-355)."""
+  availableFonts: [AvailableBrandKitFont!]!
+}
+
+"""Individual comment within a comment thread"""
+type Comment {
+  """Unique comment identifier"""
+  id: Int!
+  """ID of the user who wrote this comment"""
+  userId: Int
+  """ID of the thread this comment belongs to"""
+  threadId: Int!
+  """The comment text content"""
+  message: String!
+  """Display name of the comment author"""
+  authorName: String
+  """When the comment was last updated"""
+  updatedAt: Date
+  """Files attached to this comment"""
+  attachments: [CommentAttachments]
+}
+
+"""File attachment associated with a comment"""
+type CommentAttachments {
+  """ID of the comment this attachment belongs to"""
+  commentId: Int!
+  """Display name of the attachment"""
+  name: String!
+  """Original filename of the attachment"""
+  fileName: String!
+  """Type of attachment (image, video, audio)"""
+  type: CommentAttachmentType!
+  """File format of the attachment"""
+  format: CommentAttachmentFormat!
+  """File size in bytes"""
+  size: Int!
+  """Processing status of the attachment"""
+  status: CommentAttachmentStatus!
+  """Public URL to access the attachment"""
+  url: String
+  """Source URL of the attachment"""
+  src: String
+  """User who uploaded this attachment"""
+  createdByUser: ByUser
+  """When the attachment was last updated"""
+  updatedAt: Date!
+}
+
+"""Comment thread for design collaboration"""
+type CommentThread {
+  """Unique thread identifier"""
+  id: Int!
+  """Hash of the design this thread is attached to"""
+  designHash: String!
+  """Visual style of the comment marker"""
+  hotspotType: CommentThreadHotspotType
+  """Position of the comment thread on the design"""
+  position: CommentThreadPosition!
+  """Who can access this comment thread"""
+  access: CommentThreadAccess
+  """Whether this thread has been marked as resolved"""
+  resolved: Boolean
+  """Whether the current user has read this thread"""
+  read: Boolean
+  """All comments in this thread"""
+  comments: [Comment!]!
+  """User-specific details for this thread"""
+  userDetails: [CommentThreadUserDetails]
+  """When the thread was created"""
+  createdAt: Date
+  """When the thread was last updated"""
+  updatedAt: Date
+}
+
+"""Position coordinates for comment threads on designs"""
+type CommentThreadPosition {
+  """X coordinate position"""
+  x: Int!
+  """Y coordinate position"""
+  y: Int!
+  """Unique key identifier"""
+  key: Int!
+  """ID of the slide this position refers to"""
+  slideId: Int!
+  """Scale factor"""
+  s: Float
+}
+
+"""User-specific details for comment threads"""
+type CommentThreadUserDetails {
+  """Timestamp when user last read the thread"""
+  lastReadAt: Date
+}
+
+"""Comments data for shared designs"""
+type CommentsResult {
+  """Comment threads on this design"""
+  threads: [CommentThread!]
+  """Whether the current user is viewing as a guest"""
+  isGuest: Boolean!
+}
+
+"""Response payload for folder creation"""
+type CreateFolderPayload {
+  """The folder that was created"""
+  folder: Folder!
+}
+
+"""Credit balance information"""
+type CreditBalance {
+  """Available recurring credits"""
+  availableRecurringCredits: Int!
+  """Available rolling credits"""
+  availableRollingCredits: Int!
+  """Available top-up credits"""
+  availableTopUpCredits: Int!
+  """Locked recurring credits"""
+  lockedRecurringCredits: Int!
+  """Locked rolling credits"""
+  lockedRollingCredits: Int!
+  """Locked top-up credits"""
+  lockedTopUpCredits: Int!
+  """Total available credits across all types"""
+  totalAvailableCredits: Int!
+  """Total locked credits across all types"""
+  totalLockedCredits: Int!
+  """Consumed recurring credits"""
+  consumedRecurringCredits: Int!
+  """Consumed rolling credits"""
+  consumedRollingCredits: Int!
+  """Consumed top-up credits"""
+  consumedTopUpCredits: Int!
+  """Total consumed credits across all types"""
+  totalConsumedCredits: Int!
+  """Credit limits"""
+  creditsLimit: CreditLimit!
+}
+
+"""Credit limits by type"""
+type CreditLimit {
+  """Recurring credits limit"""
+  recurringCredits: Int!
+  """Rolling credits limit"""
+  rollingCredits: Int!
+  """Top-up credits limit"""
+  topUpCredits: Int!
+}
+
+"""Represents a credit operation with its associated cost"""
+type CreditOperation {
+  id: Int!
+  featureName: String!
+  featureType: String!
+  cost: Int!
+}
+
+"""Response payload for brand kit deletion"""
+type DeleteBrandkitPayload {
+  """Whether the deletion was successful"""
+  status: Status!
+}
+
+"""Response payload for design deletion"""
+type DeleteDesignPayload {
+  """Whether the deletion was successful"""
+  status: Status!
+}
+
+"""Response payload for folder deletion"""
+type DeleteFolderPayload {
+  """Whether the deletion was successful"""
+  status: Status!
+}
+
+"""Response payload for media folder deletion"""
+type DeleteMediaFolderPayload {
+  success: Boolean!
+}
+
+"""Response payload for project deletion"""
+type DeleteProjectPayload {
+  """Whether the deletion was successful"""
+  status: Status!
+}
+
+"""Response payload for template folder deletion"""
+type DeleteTemplateFolderPayload {
+  success: Boolean!
+}
+
+"""Basic design information"""
+type Design {
+  """Unique numeric identifier for the design"""
+  id: Int!
+  """Unique hash identifier for the design"""
+  hash: String!
+}
+
+"""Design size variant information"""
+type DesignSize {
+  """Unique hash identifier for this size"""
+  hash: String!
+  """Display name for this size"""
+  name: String!
+  """Type/category of this size"""
+  kind: String!
+  """Width in the specified unit"""
+  width: Float!
+  """Height in the specified unit"""
+  height: Float!
+  """Unit of measurement"""
+  measureUnit: MeasureUnit!
+}
+
+"""Design version history entry"""
+type DesignVersionHistory {
+  """Unique version identifier"""
+  id: String!
+  """When this version was last modified"""
+  lastModified: String!
+  """Name of user who last modified this version"""
+  lastModifiedByName: String
+  """Profile picture URL of user who last modified this version"""
+  lastModifiedByProfilePicture: String
+  """Custom name for this version"""
+  versionName: String
+  """Size hash identifier for this version"""
+  sizeHash: String!
+}
+
+"""Complete download operation containing one or more creatives"""
+type Download {
+  """Unique download identifier"""
+  id: ID!
+  """Element modifications applied during generation"""
+  elementsChanges: [ElementChanges!]
+  """Export format requested"""
+  type: DownloadType!
+  """Current processing status"""
+  status: DownloadStatus!
+  """Error message if processing failed"""
+  errorLog: String
+  """Generated creatives from this download"""
+  creatives: [DownloadCreative!]!
+  """Custom variables passed with the download request"""
+  variables: [ApiVariable!]
+}
+
+"""Individual creative design within a download"""
+type DownloadCreativeDesign {
+  """Unique identifier for this creative"""
+  id: ID!
+  """Download batch identifier this creative belongs to"""
+  downloadId: String!
+  """Width in the specified measurement unit"""
+  width: Float!
+  """Height in the specified measurement unit"""
+  height: Float!
+  """Width in pixels"""
+  widthPx: Int!
+  """Height in pixels"""
+  heightPx: Int!
+  """Export format of this creative"""
+  type: DownloadType!
+  """Current processing status"""
+  status: DownloadStatus!
+  """Slide number for multi-slide designs"""
+  slideNumber: Int
+  """Error message if processing failed"""
+  errorLog: String
+  """Design information this creative was generated from"""
+  design: Design
+  """Download URL for the generated creative"""
+  url: String
+  """Size specifications for this creative"""
+  size: DownloadCreativeSize
+}
+
+"""Set of related creatives in a download batch"""
+type DownloadCreativeSet {
+  """Unique identifier for this creative set"""
+  id: ID!
+  """Download batch identifier this set belongs to"""
+  downloadId: String!
+  """Export format for all creatives in this set"""
+  type: DownloadType!
+  """Current processing status of the entire set"""
+  status: DownloadStatus!
+  """Error message if processing failed"""
+  errorLog: String
+  """Design information this set was generated from"""
+  design: Design
+  """Individual creatives within this set"""
+  creatives: [DownloadCreativeDesign!]!
+  """Download URL for individual files"""
+  url: String
+  """Download URL for ZIP archive containing all creatives"""
+  zipUrl: String
+}
+
+"""Size specifications for downloaded creatives"""
+type DownloadCreativeSize {
+  """Display name for this size"""
+  name: String!
+  """Unit of measurement used"""
+  measureUnit: MeasureUnit!
+  """Width in the specified unit"""
+  width: Float!
+  """Height in the specified unit"""
+  height: Float!
+}
+
+"""Paginated list of downloads"""
+type DownloadList implements PaginationResults {
+  """Total number of downloads available"""
+  totalCount: Int
+  """Downloads in the current page"""
+  nodes: [Download!]!
+  """Pagination information"""
+  pageInfo: PageInfo!
+}
+
+type ElementAttributeChangeAndValue {
+  attribute: ElementAttributeChange!
+  value: String
+}
+
+"""Represents a single attribute change on an element"""
+type ElementChange {
+  """The attribute that was modified"""
+  attribute: ElementAttributeChange!
+  """The new value of the attribute"""
+  value: String!
+  """Additional metadata about the change"""
+  meta: String
+}
+
+"""Represents all changes applied to a specific element"""
+type ElementChanges {
+  """The name/identifier of the element that was modified"""
+  elementName: String!
+  """List of attribute changes applied to this element"""
+  changes: [ElementChange!]!
+}
+
+"""Complete export operation containing one or more creatives"""
+type Export {
+  """Unique export identifier"""
+  id: ID!
+  """Element modifications applied during generation"""
+  elementsChanges: [ElementChanges!]
+  """Export format requested"""
+  type: DownloadType!
+  """Current processing status"""
+  status: DownloadStatus!
+  """Error message if processing failed"""
+  errorLog: String
+  """Generated creatives from this export"""
+  creatives: [ExportCreative!]!
+  """Custom variables passed with the export request"""
+  variables: [ApiVariable!]
+}
+
+"""Individual creative design within an export"""
+type ExportCreativeDesign {
+  """Unique identifier for this creative"""
+  id: ID!
+  """Export batch identifier this creative belongs to"""
+  downloadId: String!
+  """Width in the specified measurement unit"""
+  width: Float!
+  """Height in the specified measurement unit"""
+  height: Float!
+  """Width in pixels"""
+  widthPx: Int!
+  """Height in pixels"""
+  heightPx: Int!
+  """Export format of this creative"""
+  type: DownloadType!
+  """Current processing status"""
+  status: DownloadStatus!
+  """Slide number for multi-slide designs"""
+  slideNumber: Int
+  """Error message if processing failed"""
+  errorLog: String
+  """Design information this creative was generated from"""
+  design: Design
+  """Download URL for the generated creative"""
+  url: String
+  """Size specifications for this creative"""
+  size: DownloadCreativeSize
+}
+
+"""Result of a creative export operation"""
+type ExportCreativeResult {
+  """The export operation that was created"""
+  export: Download!
+}
+
+"""Set of related creatives in an export batch"""
+type ExportCreativeSet {
+  """Unique identifier for this creative set"""
+  id: ID!
+  """Export batch identifier this set belongs to"""
+  downloadId: String!
+  """Export format for all creatives in this set"""
+  type: DownloadType!
+  """Current processing status of the entire set"""
+  status: DownloadStatus!
+  """Error message if processing failed"""
+  errorLog: String
+  """Design information this set was generated from"""
+  design: Design
+  """Individual creatives within this set"""
+  creatives: [ExportCreativeDesign!]!
+  """Download URL for individual files"""
+  url: String
+  """Download URL for ZIP archive containing all creatives"""
+  zipUrl: String
+}
+
+"""Export configuration settings"""
+type ExportSettings {
+  """Image/video quality (0-100, higher is better quality)"""
+  quality: Int
+  """GIF quality preset selection"""
+  gifPreset: GifPreset
+  """Ad network ID for HTML exports"""
+  networkId: Int
+  """Specific slides to export (for multi-slide designs)"""
+  slides: [Int]
+  """Scale factor for export resolution"""
+  scale: Float
+  """Target frames per second for video exports"""
+  targetFPS: Int
+  """Export at retina/high-DPI resolution"""
+  retina: Boolean
+  """Export only retina version (no standard resolution)"""
+  retinaOnly: Boolean
+  """Convert custom fonts to web-safe fonts"""
+  convertCustomFonts: Boolean
+  """Minify HTML output for smaller file size"""
+  minifyHtml: Boolean
+  """Link target behavior for clickable elements"""
+  urlTarget: Target
+  """Use click tag functionality for ad serving"""
+  useAsClickTag: Boolean
+  """URL for click tag destination"""
+  clickTagUrl: String
+  """Include fallback image for HTML exports"""
+  includeFallbackImage: Boolean
+  """PDF quality preset"""
+  pdfPreset: PdfPreset
+  """Color profile for print exports"""
+  colorProfile: PrintColorProfile
+  """Only allow exporting to these size hashes"""
+  allowedSizeHashesOnly: [String]
+  """Deprecated: MP4 V3 is now the only export path, so this flag is ignored. Kept for backward compatibility; will be removed in a future version."""
+  exportMp4V3: Boolean @deprecated(reason: "MP4 V3 is now the only export path; this field is ignored and will be removed in a future version.")
+  """Enable responsive scaling for HTML5 exports (defaults to true when omitted)"""
+  responsiveScaling: Boolean
+  """When true, use the app's download naming convention for exported files."""
+  useAppFileNaming: Boolean
+}
+
+"""Feature consumption breakdown"""
+type FeatureBreakdown {
+  """Feature name"""
+  featureName: String!
+  """Feature type"""
+  featureType: String!
+  """Credits consumed for this feature"""
+  credits: Int!
+}
+
+"""Status information for Figma imports"""
+type FigmaStatusPayload {
+  """Current processing status"""
+  status: ParseStatus!
+  """Error message if import failed"""
+  error: String
+  """URL to the imported design if successful"""
+  designUrl: String
+  """Current processing step identifier (e.g. preparing, processing_frames, creating_design)"""
+  progressStep: String
+  """Number of items completed in the current step"""
+  progressCompleted: Int
+  """Total number of items in the current step"""
+  progressTotal: Int
+}
+
+"""Folder for organizing designs within projects"""
+type Folder {
+  """Unique folder identifier"""
+  id: Int!
+  """Display name of the folder"""
+  name: String!
+  """Project this folder belongs to"""
+  projectId: Int!
+  """Parent folder ID (null for root folders)"""
+  parentId: Int
+  """User who created this folder"""
+  createdByUser: ByUser
+  """User who last updated this folder"""
+  updatedByUser: ByUser
+  """When this folder was created"""
+  createdAt: Date
+  """When this folder was last updated"""
+  updatedAt: Date
+  """Whether this folder contains subfolders"""
+  isParent: Boolean
+}
+
+"""Folder structure with navigation path"""
+type Folders {
+  """Folders at the current level"""
+  folders: [Folder!]!
+  """Breadcrumb path to current location"""
+  path: [Parent!]!
+  """Hash of the root folder"""
+  rootFolderHash: String
+}
+
+"""Presigned URL details for uploading a font to S3"""
+type FontUploadUrl {
+  """The S3 presigned POST URL"""
+  url: String!
+  """Form fields to include in the upload POST request"""
+  fields: JSON!
+  """Hash identifier for the uploaded file (pass to uploadBrandKitFont)"""
+  hash: String!
+}
+
+type FontWithVariants {
+  fontName: String
+  variants: [Fontvariant]
+}
+
+"""Font variant information"""
+type Fontvariant {
+  """Font weight (e.g., '400', '700')"""
+  weight: String
+  """Font subfamily name"""
+  subFamily: String
+}
+
+"""General settings for new design creation"""
+type GeneralSettings {
+  """Project ID where new design should be created"""
+  newDesignProjectId: Int
+  """Folder ID where new design should be placed"""
+  newDesignFolderId: Int
+  """Name for the new design"""
+  newDesignName: String
+}
+
+"""Result of a creative generation operation"""
+type GenerateCreativeResult {
+  """The download operation that was created"""
+  download: Download!
+}
+
+"""Result of share link generation"""
+type GenerateShareLinkResult {
+  """Public URL for sharing the design"""
+  shareLinkUrl: String!
+}
+
+"""Response payload for listing credit operations"""
+type ListCreditOperationsPayload {
+  operations: [CreditOperation!]!
+}
+
+"""Media file information"""
+type Media {
+  """Unique media identifier"""
+  id: Int!
+  """Unique hash identifier"""
+  hash: String!
+  """Display name of the media file"""
+  name: String!
+  """Original filename"""
+  fileName: String!
+  """Type of media (image, video, audio)"""
+  type: MediaType!
+  """File format"""
+  format: String!
+  """File size in bytes"""
+  size: Int!
+  """Width in pixels (for images/videos)"""
+  width: Int
+  """Height in pixels (for images/videos)"""
+  height: Int
+  """Duration in seconds (for videos/audio)"""
+  duration: Float
+  """Processing status"""
+  status: MediaStatus!
+  """Public URL to access the media"""
+  url: String
+  """Source URL of the media"""
+  src: String
+  """File checksum for integrity verification"""
+  checksum: String!
+  """When the media was uploaded"""
+  createdAt: Date!
+  """User ID who uploaded this media"""
+  createdBy: Int
+  """User who uploaded this media"""
+  createdByUser: ByUser
+  """When the media was last updated"""
+  updatedAt: Date!
+}
+
+"""Media folder for organizing brand kit assets"""
+type MediaFolder {
+  """Unique folder identifier"""
+  id: Int!
+  """Display name of the folder"""
+  name: String!
+  """Parent folder id (null if at brand kit root)"""
+  parentId: Int
+  """Folder type — distinguishes logo folders from asset/media folders"""
+  type: MediaFolderType!
+  """Creation timestamp"""
+  createdAt: Date!
+  """Last update timestamp"""
+  updatedAt: Date!
+  """User who created the folder"""
+  createdByUser: ByUser
+}
+
+"""Response payload for media folder create/rename"""
+type MediaFolderPayload {
+  mediaFolder: MediaFolder!
+}
+
+"""Paginated media folder listing with breadcrumb path"""
+type MediaFolders {
+  """Folders at the requested level"""
+  items: [MediaFolder!]!
+  """Breadcrumb path from brand kit root to the requested folder"""
+  path: [MediaParent!]!
+}
+
+"""Folder breadcrumb entry"""
+type MediaParent {
+  id: Int!
+  name: String!
+}
+
+"""Per-family breakdown of what's missing from the BrandKit for the import"""
+type MissingFontFamily {
+  """Family name as written in the Figma TEXT node (display-cased)"""
+  family: String!
+  """True if the family itself isn't in the BrandKit at all; false if only specific weights are missing"""
+  familyMissing: Boolean!
+  """Specific (weight, style) pairs missing on a family that IS in the BrandKit. Empty when familyMissing=true."""
+  missingWeights: [MissingFontWeight!]!
+}
+
+"""A single (weight, style) the design needs but the BrandKit doesn't have"""
+type MissingFontWeight {
+  """Numeric weight (100-900)"""
+  weight: Int!
+  """Style label parsed from Figma's fontPostScriptName (e.g. Regular, Bold, BoldItalic)"""
+  style: String!
+  """Capped, deduplicated layer names that use this (family, weight, style)"""
+  layers: [String!]!
+}
+
+"""Team consumption report payload"""
+type MonthlyConsumptionBreakdown {
+  month: String!
+  credits: Int!
+}
+
+"""Root mutation type for the Creatopy Public API - handles all data modifications"""
+type Mutation {
+  """
+  Generate creatives (exports) from an existing template with customizations.
+This is the primary method for creating personalized designs from templates.
+  """
+  generateCreative(templateHash: String!, type: DownloadType!, exportSettings: InputExportSettings, elementsChanges: [InputElementChanges!], variables: [InputApiVariable!], feed: InputGenerateCreativeFeed, webhookUrl: String, pipelineId: String, source: DownloadSource, generalSettings: InputGeneralSettings, generalChanges: GeneralChanges): GenerateCreativeResult!
+  """Acknowledge receipt of a pipeline download to mark it as processed"""
+  acknowledgePipelineDownload(downloadId: String!, pipelineId: String!): AcknowledgeDownloadByPipelinePayload!
+  """Retrieve a specific creative by its unique identifier (duplicate of query)"""
+  creative(creativeId: ID!): DownloadCreative!
+  """Generate a shareable link for a template with optional customizations"""
+  generateSharelink(templateHash: String!, elementsChanges: [InputElementChanges!], generalChanges: GeneralChanges): GenerateShareLinkResult!
+  """Export an existing creative/design to a specific format"""
+  exportCreative(creativeHash: String!, type: DownloadType!, exportSettings: InputExportSettings, variables: [InputApiVariable!], feed: InputGenerateCreativeFeed, webhookUrl: String, pipelineId: String, source: DownloadSource, generalChanges: GeneralChanges): ExportCreativeResult!
+  """Create a new brand kit for organizing brand assets"""
+  createBrandKit(name: String!, brandName: String, website: String, description: String, voice: String, tone: [String!]): BrandKitPayload!
+  """Create a new color palette on a brand kit"""
+  createBrandKitColorPalette(brandKitId: Int!, input: InputCreateBrandKitColorPalette!): BrandKitColorPalette!
+  """Update an existing color palette on a brand kit"""
+  updateBrandKitColorPalette(brandKitId: Int!, paletteId: Int!, input: InputUpdateBrandKitColorPalette!): BrandKitColorPalette!
+  """Delete a color palette from a brand kit"""
+  deleteBrandKitColorPalette(brandKitId: Int!, paletteId: Int!): DeleteBrandkitPayload!
+  """Create a new logo folder inside a brand kit"""
+  createBrandKitLogoFolder(brandkitId: Int!, name: String!, parentId: Int): MediaFolderPayload!
+  """Create a new asset folder inside a brand kit"""
+  createBrandKitAssetFolder(brandkitId: Int!, name: String!, parentId: Int): MediaFolderPayload!
+  """Create a new template folder inside a brand kit"""
+  createBrandKitTemplateFolder(brandkitId: Int!, name: String!): TemplateFolderPayload!
+  """Rename a logo folder inside a brand kit"""
+  renameBrandKitLogoFolder(brandkitId: Int!, folderId: Int!, name: String!): MediaFolderPayload!
+  """Delete a logo folder inside a brand kit"""
+  deleteBrandKitLogoFolder(brandkitId: Int!, folderId: Int!): DeleteMediaFolderPayload!
+  """Rename an asset folder inside a brand kit"""
+  renameBrandKitAssetFolder(brandkitId: Int!, folderId: Int!, name: String!): MediaFolderPayload!
+  """Delete an asset folder inside a brand kit"""
+  deleteBrandKitAssetFolder(brandkitId: Int!, folderId: Int!): DeleteMediaFolderPayload!
+  """Rename a template folder inside a brand kit"""
+  renameBrandKitTemplateFolder(brandkitId: Int!, folderId: Int!, name: String!): TemplateFolderPayload!
+  """Delete a template folder inside a brand kit"""
+  deleteBrandKitTemplateFolder(brandkitId: Int!, folderId: Int!): DeleteTemplateFolderPayload!
+  """Delete a font from a brand kit"""
+  deleteBrandKitFont(brandKitId: Int!, fontId: Int!): DeleteBrandkitPayload!
+  """Upload a font to a brand kit using a previously uploaded S3 hash"""
+  uploadBrandKitFont(brandKitId: Int!, hash: String!, name: String!): BrandKitFont!
+  """Create a new project for organizing designs and templates"""
+  createProject(name: String!, brandKitId: Int!, color: String): ProjectPayload!
+  """Delete an existing project and all its contents"""
+  deleteProject(projectId: Int!): DeleteProjectPayload!
+  """Add a new user to the team (admin access required)"""
+  createTeamUser(email: String!, name: String!, role: String!): TeamUserData!
+  """Remove a user from the team (admin access required)"""
+  deleteTeamUser(email: String!): Boolean!
+  """Update a team user's role (admin access required)"""
+  updateTeamUserRole(userId: Int!, roleId: Int!): TeamUserData!
+  """Create a new webhook for team notifications"""
+  createTeamWebhook(name: String!, url: String!, actions: [Int!]!): TeamWebhook!
+  """Update an existing team webhook configuration"""
+  updateTeamWebhook(webhookId: Int!, name: String, url: String, actions: [Int!]): TeamWebhook!
+  """Delete a team webhook"""
+  deleteTeamWebhook(webhookId: Int!): Boolean!
+  """Delete a design or template permanently"""
+  deleteDesign(hash: String!): DeleteDesignPayload!
+  """Create a new folder within a project for organizing designs"""
+  createFolder(name: String!, projectId: Int!, parentId: Int): CreateFolderPayload!
+  """Rename an existing folder"""
+  renameFolder(name: String!, folderId: Int!): UpdateFolderNamePayload!
+  """Delete a folder and optionally its contents"""
+  deleteFolder(folderId: Int!): DeleteFolderPayload!
+  """Delete a brand kit permanently"""
+  deleteBrandKit(brandkitId: Int!): DeleteBrandkitPayload!
+  """Rename an existing brand kit"""
+  renameBrandKit(brandkitId: Int!, name: String!): RenameBrandKitPayload! @deprecated(reason: "Use updateBrandKit instead")
+  """Update a brand kit's details"""
+  updateBrandKit(brandkitId: Int!, name: String, brandName: String, website: String, description: String, voice: String, tone: [String!]): BrandKitPayload!
+  """Update project settings and configuration"""
+  updateProject(projectId: Int!, name: String, assignedBrandKitId: Int, isBrandKitSelectable: Boolean): ProjectPayload!
+  """Add a user to a specific project"""
+  addProjectUser(userId: Int!, projectId: Int!): AddProjectUserPayload!
+  """Remove a user from a specific project"""
+  removeProjectUser(userId: Int!, projectId: Int!): RemoveProjectUserPayload!
+  """Update the name of a design version"""
+  updateVersionName(hash: String!, versionName: String!, versionId: String!): UpdateVersionNamePayload!
+  """Create a new version of a design"""
+  addVersion(hash: String!, versionName: String): AddVersionPayload!
+  """Restore a design to a previous version"""
+  restoreVersion(hash: String!, versionId: String!): RestoreVersionPayload!
+  """Move a design to a different folder"""
+  moveDesignToFolder(designHash: String!, folderId: Int!): Boolean!
+  """Upload media assets to a brand kit"""
+  uploadAssets(sources: [String!]!, brandkitId: Int!, mediaFolderId: Int): [Media!]
+  """Upload logo assets to a brand kit"""
+  uploadLogo(sources: [String!]!, brandkitId: Int!, logoFolderId: Int): [Media!]
+  """Enable ad tag functionality for a design"""
+  adTagEnable(designHash: String!): Boolean!
+  """Disable ad tag functionality for a design"""
+  adTagDisable(designHash: String!): Boolean!
+  """Update ad tag settings for a design"""
+  adTagUpdateSettings(input: InputUpdateAdTagSettings!): AdTagDesignSettings!
+  """Generate ad tag file in specified format"""
+  adTagGenerateFile(input: InputAdTagGenerateFile!): AdTagGenerateFilePayload!
+  """Process Figma JSON data to import designs"""
+  processFigmaJson(input: InputProcessFigmaJson!): ProcessFigmaJsonPayload!
+}
+
+"""Pagination metadata for cursor-based pagination"""
+type PageInfo {
+  """Whether there are more items after the current page"""
+  hasNextPage: Boolean!
+  """Cursor pointing to the last item in current results"""
+  endCursor: String
+}
+
+"""Parent folder information for breadcrumb navigation"""
+type Parent {
+  """Unique parent identifier"""
+  id: Int!
+  """Display name of the parent"""
+  name: String!
+  """Whether this parent is shared"""
+  shared: Boolean!
+  """Public visibility status"""
+  publicStatus: PublicStatus!
+  """Public access hash"""
+  publicHash: String!
+  """Whether this is a template"""
+  template: Boolean
+}
+
+"""Response payload for Figma JSON processing"""
+type ProcessFigmaJsonPayload {
+  """Unique key for tracking this import"""
+  key: String!
+}
+
+"""Project for organizing designs and templates"""
+type Project {
+  """Unique project identifier"""
+  id: Int!
+  """Team that owns this project"""
+  teamId: Int!
+  """Display name of the project"""
+  name: String!
+  """User ID who created this project"""
+  createdBy: Int
+  """Color theme for the project (hex color)"""
+  color: String
+  """Project description"""
+  description: String
+  """Associated brand kit"""
+  brandKit: BrandKit
+  """Whether users can select different brand kits"""
+  isBrandKitSelectable: Boolean
+}
+
+"""Paginated list of projects"""
+type ProjectList implements PaginationResults {
+  """Total number of projects available"""
+  totalCount: Int
+  """Projects in the current page"""
+  nodes: [ProjectListItem!]!
+  """Pagination information"""
+  pageInfo: PageInfo!
+}
+
+"""Project information for listing"""
+type ProjectListItem {
+  """Unique project identifier"""
+  id: Int!
+  """Team that owns this project (needed by the Figma plugin to deep-link into the team-scoped BrandKit URL)"""
+  teamId: Int!
+  """Display name of the project"""
+  name: String!
+  """User ID who created this project"""
+  createdBy: Int
+  """Color theme for the project (hex color)"""
+  color: String
+  """Project description"""
+  description: String
+  """Associated brand kit"""
+  brandKit: BrandKitForProject
+}
+
+"""Response payload for project operations"""
+type ProjectPayload {
+  """The project that was created or modified"""
+  project: Project!
+}
+
+"""A single record in the ad tag report"""
+type PublicAdTagReportRecord {
+  """Number of ad views/impressions"""
+  views: Int!
+  """Number of ad clicks"""
+  clicks: Int!
+  """Click-through rate"""
+  ctr: Float!
+  """Ad network identifier"""
+  networkId: Int
+  """Ad network name"""
+  networkName: String
+  """Date string"""
+  date: String
+  """Design hash identifier"""
+  designHash: String
+  """Design name"""
+  designName: String
+  """Design size description"""
+  designSize: String
+  """Project identifier"""
+  projectId: Int
+  """Project name"""
+  projectName: String
+  """Feed variation identifier"""
+  feedVariation: String
+  """Month string in mm/yyyy format"""
+  month: String
+}
+
+"""Root query type for the Creatopy Public API"""
+type Query {
+  """Retrieve a specific creative by its unique identifier"""
+  creative(creativeId: ID!): DownloadCreative!
+  """Retrieve a specific download by its unique identifier (deprecated - use 'export' instead)"""
+  download(downloadId: ID!): Download! @deprecated(reason: "Use 'export' query instead.")
+  """Retrieve paginated list of downloads for the authenticated user"""
+  downloads(cursor: String, limit: Int): DownloadList!
+  """Retrieve all downloads associated with a specific pipeline identifier"""
+  downloadsByPipeline(pipelineId: String!): [Download!]!
+  """Search and retrieve templates with filtering and pagination options"""
+  templates(cursor: String, limit: Int, keyword: String, projectId: Int, folderId: Int, apiGenerated: Boolean, onlyTemplates: Boolean, orderBy: OrderBy, orderDirection: OrderDirection, exactSearch: Boolean): TemplateList!
+  """Search templates (deprecated - use 'templates' query instead)"""
+  searchTemplates(cursor: String, limit: Int, keyword: String, projectId: Int, apiGenerated: Boolean, onlyTemplates: Boolean, exactSearch: Boolean): TemplateList! @deprecated(reason: "Use 'templates' query instead.")
+  templateElementsAllAttributes(templateHash: String!): [TemplateElementsData]!
+  """Retrieve editable elements within a specific template"""
+  templateElements(templateHash: String!): [TemplateElement]!
+  """Retrieve account details including credit usage and limits"""
+  account: AccountDetails!
+  """Generate a shareable link for a template with optional modifications"""
+  shareLink(templateHash: String!): ShareLinkResult!
+  """Test endpoint for API connectivity"""
+  test: String!
+  """Retrieve information about the current authenticated user"""
+  me: TestResult!
+  """Retrieve information about the current authenticated user for Figma integration"""
+  figmaMe: TestResult!
+  """Retrieve a specific export by its unique identifier"""
+  export(exportId: ID!): Export!
+  """Retrieve paginated list of brand kits with filtering options"""
+  brandKits(cursor: String, limit: Int, keyword: String, orderBy: OrderBy, orderDirection: OrderDirection): BrandKitList!
+  """Retrieve a single brand kit by its unique identifier"""
+  brandKit(id: Int!): BrandKit!
+  """Retrieve media files from a specific brand kit with pagination and filtering"""
+  brandKitMedia(input: InputBrandMedia!): BrandKitMediaResult!
+  """List logos within a brand kit, paginated"""
+  brandKitLogos(input: InputBrandKitLogos!): BrandKitMediaResult!
+  """Retrieve paginated list of projects with filtering options"""
+  projects(cursor: String, limit: Int, keyword: String, orderBy: OrderBy, orderDirection: OrderDirection): ProjectList!
+  """Retrieve paginated list of projects with filtering options for Figma integration"""
+  figmaProjects(cursor: String, limit: Int, keyword: String, orderBy: OrderBy, orderDirection: OrderDirection): ProjectList!
+  """Retrieve all available ad networks (deprecated - use specific ad network queries)"""
+  adNetworks: [AdNetwork!]! @deprecated(reason: "Use 'adNetworksForAdserving' or 'adNetworksForHTML' query instead.")
+  """Retrieve ad networks available for ad serving"""
+  adNetworksForAdServing: [AdNetwork!]!
+  """Retrieve ad networks available for HTML5 exports"""
+  adNetworksForHTML: [AdNetwork!]!
+  """Retrieve all A/B tests for the authenticated team"""
+  abTests: [AbTestItem!]!
+  """Retrieve ad tag report data for the authenticated team"""
+  adTagReportData(input: InputPublicAdTagReport!): [PublicAdTagReportRecord!]!
+  """Retrieve paginated list of team users (admin access required)"""
+  teamUsers(cursor: String, limit: Int, keyword: String, orderBy: OrderBy, orderDirection: OrderDirection): TeamUserList!
+  """Retrieve all available team roles"""
+  teamRoles: [TeamRole]!
+  """Retrieve all configured team webhooks"""
+  teamWebhooks: [TeamWebhook!]
+  """Retrieve all available webhook action types"""
+  teamWebhookActions: [TeamWebhookActionType!]
+  """Retrieve folder structure for a specific project"""
+  folders(projectId: Int!, parentId: Int): Folders!
+  """Retrieve folder structure for a specific project for Figma integration"""
+  figmaFolders(projectId: Int!, parentId: Int): Folders!
+  """Retrieve users associated with a specific project"""
+  projectUsers(projectId: Int!): [TeamUser!]!
+  """Retrieve version history for a specific design"""
+  designVersionsHistory(hash: String!): [DesignVersionHistory!]!
+  """Retrieve available size variants for a template"""
+  designSizes(templateHash: String!): [DesignSize]
+  """Retrieve media folders within a brand kit"""
+  brandkitMediaFolders(brandkitId: Int!, parentId: Int): [MediaFolder!] @deprecated(reason: "Use brandKitFolders(type: media) instead. Returns a flat array; the new query returns breadcrumb path info.")
+  """List logo or asset folders within a brand kit, with breadcrumb path"""
+  brandKitFolders(brandkitId: Int!, type: MediaFolderType!, parentId: Int): MediaFolders!
+  """List template folders within a brand kit, with breadcrumb path"""
+  brandKitTemplateFolders(brandkitId: Int!, parentId: Int): TemplateFolders!
+  """Retrieve detailed font information for a specific template element"""
+  templateElementFontData(templateHash: String!, layerName: String!): [TemplateElementData]!
+  """Generate ad tag code for a specific design"""
+  adTagGenerateCode(designHash: String!): AdTagGenerateCodePayload!
+  """Search and retrieve designs (non-template creatives) with filtering options"""
+  designs(cursor: String, limit: Int, keyword: String, projectId: Int, folderId: Int, apiGenerated: Boolean, orderBy: OrderBy, orderDirection: OrderDirection, exactSearch: Boolean): TemplateList!
+  """Retrieve brand templates associated with a specific brand kit"""
+  brandTemplates(cursor: String, limit: Int, keyword: String, projectId: Int, folderId: Int, apiGenerated: Boolean, brandkitId: Int, orderBy: OrderBy, orderDirection: OrderDirection, exactSearch: Boolean): TemplateList!
+  """Check the processing status of a Figma import"""
+  figmaStatus(key: String!): FigmaStatusPayload!
+  """Check if a project is ready to receive a Figma import (has BrandKit, etc.)"""
+  canImportFigmaToProject(input: InputCanImportFigmaToProject!): CanImportFigmaToProjectPayload!
+  """Get Fonts data from Design"""
+  getDesignFonts(templateHash: String!): [FontWithVariants]
+  """Get subscription information for a team including credit balance and addons"""
+  getSubscriptionInfo(input: GetSubscriptionInfoInput!): SubscriptionInfo!
+  """Get detailed consumption report for a team with breakdown by users and features"""
+  getTeamConsumptionReport(input: GetTeamConsumptionReportInput!): TeamConsumptionReportPayload!
+  """List all available credit operations with their costs"""
+  listCreditOperations: ListCreditOperationsPayload!
+  """Get a presigned URL for uploading a font file to S3"""
+  brandKitFontUploadUrl: FontUploadUrl!
+}
+
+"""Response payload for removing users from projects"""
+type RemoveProjectUserPayload {
+  """Whether the user was successfully removed"""
+  status: Status!
+}
+
+"""Response payload for brand kit renaming"""
+type RenameBrandKitPayload {
+  """The brand kit that was renamed"""
+  brandKit: BrandKit!
+}
+
+"""Response payload for version restoration"""
+type RestoreVersionPayload {
+  """Whether the restoration was successful"""
+  status: Status!
+}
+
+"""Result of share link generation with optional comments"""
+type ShareLinkResult {
+  """Public URL for sharing the design"""
+  shareLinkUrl: String!
+  """Comments associated with this share link"""
+  comments: CommentsResult
+}
+
+"""Subscription addon information"""
+type SubscriptionAddon {
+  """Addon ID"""
+  id: Int!
+  """Addon code identifier"""
+  code: String!
+  """Addon name"""
+  name: String!
+  """Addon type"""
+  type: String!
+  """Quantity of addon"""
+  quantity: Int!
+  """Unit amount in cents"""
+  unitAmountInCents: Int!
+  """When the addon was created"""
+  createdAt: Date!
+  """When the addon was last updated"""
+  updatedAt: Date!
+}
+
+"""Subscription information for a team"""
+type SubscriptionInfo {
+  """Subscription ID"""
+  id: Int
+  """Plan code identifier"""
+  planCode: String!
+  """Plan version"""
+  planVersion: String!
+  """When the current billing period started"""
+  currentPeriodStartedAt: Date!
+  """When the current billing period ends"""
+  currentPeriodEndsAt: Date!
+  """Subscription addons"""
+  addons: [SubscriptionAddon!]
+  """Current credit balance"""
+  creditBalance: CreditBalance!
+  """Whether the user has had a trial"""
+  hadTrialThatEnded: Boolean!
+}
+
+"""Team information"""
+type Team {
+  """Unique team identifier"""
+  id: Int!
+}
+
+type TeamConsumptionReportPayload {
+  """Total credits consumed by the team"""
+  totalTeamConsumption: Int!
+  """Breakdown of consumption by user"""
+  breakdownByUsers: [UserConsumptionBreakdown!]!
+  """Breakdown of consumption by month"""
+  monthlyBreakdown: [MonthlyConsumptionBreakdown!]!
+}
+
+"""User role within a team"""
+type TeamRole {
+  """Unique role identifier"""
+  id: Int
+  """Role name (e.g., 'Admin', 'Editor', 'Viewer')"""
+  name: String
+  """Description of role permissions"""
+  description: String
+}
+
+"""Team user with project-specific information"""
+type TeamUser {
+  """User identifier"""
+  userId: Int!
+  """Team identifier"""
+  teamId: Int!
+  """User's display name"""
+  name: String!
+  """User's profile URL"""
+  url: String
+  """User's email address"""
+  email: String!
+  """URL to user's profile picture"""
+  profilePicture: String
+  """User's role name"""
+  role: String!
+  """User's role identifier"""
+  teamRoleId: Int!
+}
+
+"""Team member information"""
+type TeamUserData {
+  """Unique user identifier"""
+  id: Int!
+  """User's display name"""
+  name: String!
+  """User's email address"""
+  email: String!
+  """User's role within the team"""
+  role: TeamRole
+  """URL to user's profile picture"""
+  profilePicture: String
+}
+
+"""Paginated list of team users"""
+type TeamUserList implements PaginationResults {
+  """Total number of team users"""
+  totalCount: Int
+  """Team users in the current page"""
+  nodes: [TeamUserData!]!
+  """Pagination information"""
+  pageInfo: PageInfo!
+}
+
+"""Webhook configuration for team notifications"""
+type TeamWebhook {
+  """Unique webhook identifier"""
+  id: Int!
+  """Display name for this webhook"""
+  name: String!
+  """URL endpoint to receive webhook notifications"""
+  webhookUrl: String!
+  """Actions that trigger this webhook"""
+  actions: [TeamWebhookAction!]!
+  """When this webhook was created"""
+  createdAt: Date!
+  """User who created this webhook"""
+  createdByUser: ByUser
+}
+
+"""Action configuration for webhooks"""
+type TeamWebhookAction {
+  """Action identifier"""
+  actionId: Int!
+  """When this action was configured"""
+  createdAt: Date
+  """User who configured this action"""
+  createdByUser: ByUser
+  """Action type details"""
+  action: TeamWebhookActionType
+}
+
+"""Available webhook action types"""
+type TeamWebhookActionType {
+  """Unique action type identifier"""
+  id: Int!
+  """Action type name"""
+  name: String!
+  """Description of what this action does"""
+  description: String!
+  """Configuration options for this action type"""
+  config: JSON
+  """When this action type was created"""
+  createdAt: Date
+}
+
+"""Editable element within a template"""
+type TemplateElement {
+  """Element name/identifier"""
+  name: String!
+  """Type of layer (text, image, shape, etc.)"""
+  layerType: String!
+  """Which attribute can be changed on this element"""
+  attributeChangeType: ElementAttributeChange
+  """Current value of the element"""
+  value: String
+  """Whether the element is currently visible"""
+  visible: Boolean
+  """Slide number this element appears on"""
+  slideNumber: Int
+  """Url used if gotoUrl was added as action"""
+  gotoUrl: String
+}
+
+"""Detailed font information for template elements"""
+type TemplateElementData {
+  """Element name/identifier"""
+  name: String!
+  """Slide number this element appears on"""
+  slideNumber: Int
+  """Internal element ID"""
+  bannersetElementId: Int
+  """Font family name"""
+  fontFamily: String
+  """Type of font family (system, google, custom)"""
+  fontFamilyType: String
+  """Current font style"""
+  actualFontStyle: String
+  """Current font weight"""
+  actualFontWeight: Int
+  """Available font variants for this family"""
+  fontVariants: [Fontvariant]
+}
+
+type TemplateElementsData {
+  name: String!
+  layerType: String!
+  attributeChangeTypeAndValuePairs: [ElementAttributeChangeAndValue]
+  slideNumber: Int
+}
+
+"""Response payload for template folder create/rename"""
+type TemplateFolderPayload {
+  folder: Folder!
+}
+
+"""Template folder listing with breadcrumb path"""
+type TemplateFolders {
+  """Template folders at the requested level"""
+  items: [Folder!]!
+  """Breadcrumb path from brand kit root to the requested folder"""
+  path: [MediaParent!]!
+}
+
+"""Paginated list of templates"""
+type TemplateList implements PaginationResults {
+  """Total number of templates available"""
+  totalCount: Int
+  """Templates in the current page"""
+  nodes: [TemplateListItem!]!
+  """Pagination information"""
+  pageInfo: PageInfo!
+}
+
+"""Template information for listing"""
+type TemplateListItem {
+  """Unique template identifier (hash)"""
+  id: String!
+  """Display name of the template"""
+  name: String
+  """Thumbnail image URL"""
+  thumbUrl: String
+  """Whether this is marked as a template"""
+  isTemplate: Boolean
+  """Project ID this template belongs to"""
+  projectId: Int
+  """Folder ID this design belongs to (null if in project root)"""
+  folderId: Int
+  """Brand kit ID associated with this template"""
+  brandkitId: Int
+  """Whether this template was generated via API"""
+  apiGenerated: Boolean
+  """Editable elements within this template"""
+  elements: [TemplateElement!]
+}
+
+"""Test result containing team information"""
+type TestResult {
+  """Team associated with the current user"""
+  team: Team
+}
+
+"""Typography settings for brand kits"""
+type Typography {
+  """Font identifier"""
+  fontId: Int
+  """Font family name"""
+  fontName: String
+  """Font size in pixels"""
+  fontSize: Int
+  """Font weight (e.g., 'normal', 'bold', '400', '700')"""
+  fontWeight: String
+  """Typography type classification"""
+  type: String
+}
+
+"""Response payload for folder name updates"""
+type UpdateFolderNamePayload {
+  """The folder that was updated"""
+  folder: Folder!
+}
+
+"""Response payload for version name updates"""
+type UpdateVersionNamePayload {
+  """Whether the update was successful"""
+  status: Status!
+}
+
+"""User consumption breakdown"""
+type UserConsumptionBreakdown {
+  """User ID"""
+  userId: Int!
+  """Total credits consumed by this user"""
+  totalUserConsumption: Int!
+  """Breakdown by feature"""
+  breakdownByFeatures: [FeatureBreakdown!]!
+}
+
+"""Timestamp as a number or a valid JS string Date"""
+scalar Date
+
+"""The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."""
+scalar JSON
+
+"""JsonDesign type"""
+scalar JsonDesign
+
+"""Union type representing either a single creative or a set of creatives"""
+union DownloadCreative = DownloadCreativeDesign | DownloadCreativeSet
+
+"""Union type representing either a single export creative or a set of export creatives"""
+union ExportCreative = ExportCreativeDesign | ExportCreativeSet

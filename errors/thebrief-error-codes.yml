@@ -1,0 +1,90 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.thebrief.ai/public-api/rest-api/error-codes
+docs:
+  - https://docs.thebrief.ai/public-api/rest-api/error-codes
+  - https://docs.thebrief.ai/public-api/rest-api/credits
+summary: >-
+  The Brief publishes a short HTTP status-code reference for the Public REST API rather
+  than a symbolic error-code registry. Errors are returned as a flat JSON object with a
+  single "error" string — NOT an RFC 9457 application/problem+json document — so there is
+  no machine-readable type, title, detail or instance an agent can branch on beyond the
+  HTTP status itself.
+
+format: http-status-codes
+rfc9457: false
+problem_json_media_type: false
+
+envelope:
+  media_type: application/json
+  shape: '{"error": "<human-readable message>"}'
+  fields:
+    - {name: error, type: string, description: Human-readable error message. Not enumerated or stable.}
+  note: >-
+    Success bodies use a "response" wrapper; failures replace it with "error". Some
+    long-running export objects additionally carry an errorLog field alongside a
+    completeWithError / failed status.
+
+status_codes:
+  - status: 400
+    title: Bad Request
+    meaning: Invalid user inputs or broken design.
+    remediation: Validate the request body against the documented parameters; a broken/corrupt source design also produces 400.
+    documented_example: '{"error": "This endpoint is not available for teams that have a legacy plan"} — returned by every /v1/credits/* route for teams on a legacy plan.'
+  - status: 401
+    title: Unauthorized
+    meaning: Unauthenticated user request.
+    remediation: Mint a fresh JWT via POST /v1/auth/token and send it as Authorization Bearer.
+  - status: 403
+    title: Forbidden
+    meaning: Forbidden access to a resource.
+    remediation: The authenticated user lacks permission for the resource; admin-gated team operations require an owner/admin credential pair.
+  - status: 404
+    title: Not Found
+    meaning: Resource not found.
+    remediation: Check the design/template hash or numeric id; hashes are case-sensitive opaque strings.
+  - status: 405
+    title: Method Not Allowed
+    meaning: Method not allowed.
+    remediation: Check the documented HTTP verb for the route (e.g. ad-tag enable is POST, disable is DELETE on the same path).
+  - status: 410
+    title: Gone
+    meaning: User lacks access to a resource.
+    remediation: >-
+      Note this is The Brief's own published meaning for 410 and it diverges from RFC 9110,
+      where 410 signals a permanently removed resource. Treat it as an authorization failure, not a deletion.
+  - status: 429
+    title: Too Many Requests
+    meaning: Too many requests.
+    remediation: Back off. Export routes allow 15 req/10s/team, all other routes 100 req/10s/team. No Retry-After or RateLimit-* header is documented.
+    see: rate-limits/thebrief-rate-limits.yml
+  - status: 500
+    title: Internal Server Error
+    meaning: Internal server error for unhandled errors.
+    remediation: Retry with backoff. The docs state "Our aim is to reduce 500 errors through ongoing improvements in error management."
+
+operation_level_errors:
+  note: >-
+    Some operations document a domain error condition without a distinct code — enabling an
+    ad tag on a design that already has one, or disabling one that is not enabled, "will throw
+    an error"; ad tags are supported for designs but not templates.
+  source: https://docs.thebrief.ai/public-api/rest-api/ad-serving
+
+graphql_errors:
+  format: graphql-spec errors array
+  observed: '{"errors":[{"message":"This operation has been blocked as a potential Cross-Site Request Forgery ..."}]}'
+  probe: 'GET https://graphql.thebrief.ai/public -> 400 (2026-08-12)'
+  note: The GraphQL endpoint returns standard GraphQL error objects, not the REST "error" string envelope.
+
+async_failure_states:
+  source: graphql/thebrief-public.graphql (enum DownloadStatus, enum ParseStatus)
+  export_statuses: [pending, inProgress, complete, completeWithError, failed]
+  figma_import_statuses: [SUCCESS, FAILED, PENDING, NOT_EXISTS]
+  note: >-
+    Asynchronous export failures do not surface as HTTP errors — a 200 export object can carry
+    status completeWithError or failed with detail in errorLog. Agents must inspect the body.
+
+cross_links:
+  conventions: conventions/thebrief-conventions.yml
+  rate_limits: rate-limits/thebrief-rate-limits.yml
+  authentication: authentication/thebrief-authentication.yml

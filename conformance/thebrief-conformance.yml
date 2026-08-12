@@ -1,0 +1,158 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  Derived from graphql/thebrief-public.graphql (live introspection, 2026-08-12), the published
+  Public API documentation at https://docs.thebrief.ai/public-api, and the security page at
+  https://www.thebrief.ai/security/. Each entry states what The Brief actually conforms to and
+  what it does not; a false `conforms` is as much a finding as a true one.
+docs:
+  - https://docs.thebrief.ai/public-api
+  - https://www.thebrief.ai/security/
+
+standards:
+  - id: graphql
+    name: GraphQL (June 2018 / October 2021 spec)
+    conforms: true
+    evidence: >-
+      Single POST endpoint at https://graphql.thebrief.ai/public serving a spec-compliant schema —
+      anonymous __schema introspection returned HTTP 200 with 186 types, 48 Query fields and
+      49 Mutation fields on 2026-08-12. Standard GraphQL errors array on failure.
+
+  - id: graphql-cursor-connections
+    name: GraphQL Cursor Connections (Relay) pagination shape
+    conforms: partial
+    evidence: >-
+      Uses the Relay connection vocabulary — nodes[], pageInfo{hasNextPage,endCursor}, totalCount —
+      on both the GraphQL and REST surfaces, but omits edges/cursor per node and hasPreviousPage/
+      startCursor, so it is the connection SHAPE rather than full Relay conformance.
+
+  - id: rfc7519-jwt
+    name: 'RFC 7519 — JSON Web Token'
+    conforms: true
+    evidence: >-
+      Authentication is a JWT bearer token minted at POST /v1/auth/token from a clientId/clientSecret
+      pair, or self-signed by the client with the shared secret (documented with jsonwebtoken).
+      The App Integration session token is the same JWT form carrying clientId/userId/action claims.
+
+  - id: rfc6750-bearer
+    name: 'RFC 6750 — OAuth 2.0 Bearer Token Usage'
+    conforms: partial
+    evidence: >-
+      The Authorization: Bearer <token> transport form is used, but the token is not issued by an
+      OAuth 2.0 authorization server and no WWW-Authenticate challenge is documented.
+
+  - id: oauth2
+    name: 'OAuth 2.0 (RFC 6749)'
+    conforms: false
+    evidence: >-
+      No authorization server, no authorization-code or client-credentials grant, no consent screen.
+      https://api.thebrief.ai/.well-known/oauth-authorization-server -> 404 (2026-08-12).
+
+  - id: oidc
+    name: OpenID Connect Discovery
+    conforms: false
+    evidence: 'https://www.thebrief.ai/.well-known/openid-configuration -> 404; also 404 on api. and docs. hosts (2026-08-12).'
+
+  - id: rfc9457
+    name: 'RFC 9457 — Problem Details for HTTP APIs'
+    conforms: false
+    evidence: >-
+      Errors are returned as {"error": "<string>"} with media type application/json. No
+      application/problem+json, no type/title/detail/instance members.
+
+  - id: rfc9110-semantics
+    name: 'RFC 9110 — HTTP Semantics (status code usage)'
+    conforms: partial
+    evidence: >-
+      Standard use of 400/401/403/404/405/429/500, but the published error reference redefines
+      410 Gone as "User lacks access to a resource", which is an authorization meaning rather
+      than the RFC's permanently-removed-resource meaning.
+
+  - id: rfc6585-429
+    name: 'RFC 6585 — 429 Too Many Requests'
+    conforms: partial
+    evidence: >-
+      429 is returned on exhaustion, but the RFC-recommended Retry-After is not documented,
+      and no RateLimit-* / X-RateLimit-* headers are published.
+
+  - id: ietf-ratelimit-headers
+    name: 'draft-ietf-httpapi-ratelimit-headers'
+    conforms: false
+    evidence: No RateLimit-Limit / RateLimit-Remaining / RateLimit-Reset headers are documented.
+
+  - id: rfc8594-sunset
+    name: 'RFC 8594 — Sunset HTTP Header'
+    conforms: false
+    evidence: >-
+      Deprecation is announced in prose (Creatopy API domain grace period) and via GraphQL
+      @deprecated directives, but no Sunset or Deprecation response header is documented.
+
+  - id: idempotency-key
+    name: 'draft-ietf-httpapi-idempotency-key-header'
+    conforms: false
+    evidence: No Idempotency-Key header or request-deduplication semantics appear in the docs or schema.
+
+  - id: openapi
+    name: OpenAPI Specification
+    conforms: false
+    evidence: >-
+      No OpenAPI/Swagger document is published. Probed 2026-08-12 on the API host root and the
+      docs host — /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs, /docs,
+      /redoc all returned 404 on api.thebrief.ai and api.creatopy.com. The GraphQL schema is the
+      only machine-readable contract.
+
+  - id: asyncapi
+    name: AsyncAPI
+    conforms: false
+    evidence: >-
+      A real webhook surface exists (team webhook subscriptions + per-export callbacks) but no
+      AsyncAPI document is published. See asyncapi/thebrief-webhooks.yml.
+
+  - id: rfc9116-security-txt
+    name: 'RFC 9116 — security.txt'
+    conforms: false
+    evidence: '/.well-known/security.txt -> 404 on www., api. and docs.thebrief.ai (2026-08-12).'
+
+  - id: a2a-agent-card
+    name: A2A Agent Card
+    conforms: false
+    evidence: '/.well-known/agent-card.json and /.well-known/agent.json -> 404 on www., api., docs.thebrief.ai (2026-08-12). app.thebrief.ai answers 200 with an SPA HTML shell on every path — not a card.'
+
+  - id: mcp
+    name: Model Context Protocol
+    conforms: false
+    evidence: 'tools/list POST -> 404 on mcp.thebrief.ai, api.thebrief.ai/mcp, www.thebrief.ai/mcp; 405 on docs. and app. (2026-08-12). No hosted MCP server.'
+
+  - id: llmstxt
+    name: llms.txt
+    conforms: true
+    evidence: >-
+      Two llms.txt documents are served — a hand-authored marketing/product index at
+      https://www.thebrief.ai/llms.txt and a GitBook-generated documentation index at
+      https://docs.thebrief.ai/llms.txt covering all 57 doc pages, with per-page .md variants
+      and an llms-full.txt. Both captured in llms/.
+
+compliance:
+  published: true
+  source: https://www.thebrief.ai/security/
+  certifications:
+    - {name: ISO 27001, scope: Information security management, evidence: named on the security page}
+    - {name: GDPR, scope: EU data protection, evidence: named on the security page}
+  enterprise_governance:
+    source: https://www.thebrief.ai/pricing/
+    note: >-
+      The Enterprise tier advertises SSO/SAML/SCIM, custom roles, user groups and "ISO audits"
+      as contracted governance features. SCIM is offered as an enterprise provisioning feature;
+      it is NOT part of the Public API surface documented at docs.thebrief.ai.
+  see: security/thebrief-trust-center.yml
+
+industry_standards:
+  - {id: iab-vast, name: IAB VAST, conforms: unknown, note: Not claimed in the public docs despite the ad-serving surface.}
+  - {id: display-adtag, name: 'Display ad tag / clickTag conventions', conforms: true, evidence: 'HTML5 export settings expose useAsClickTag and clickTagUrl, and ad tag code is generated per ad network (25+ networks, plus CM360/DV360 trafficking files in CSV/XLSX).'}
+
+cross_links:
+  authentication: authentication/thebrief-authentication.yml
+  conventions: conventions/thebrief-conventions.yml
+  errors: errors/thebrief-error-codes.yml
+  lifecycle: lifecycle/thebrief-lifecycle.yml
+  security: security/thebrief-trust-center.yml

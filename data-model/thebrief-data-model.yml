@@ -1,0 +1,127 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  Derived from graphql/thebrief-public.graphql (186 types, 48 queries, 49 mutations),
+  rendered from the live anonymous introspection response at
+  https://graphql.thebrief.ai/public on 2026-08-12, and cross-checked against the REST
+  resource documentation at https://docs.thebrief.ai/public-api/rest-api. Every entity,
+  field and reference below appears verbatim in the provider's own schema — no entity or
+  relationship has been invented. The Brief publishes no OpenAPI, so the GraphQL schema is
+  the only machine-readable contract this graph could be derived from.
+docs: https://docs.thebrief.ai/public-api/rest-api
+notation: >-
+  Relationships use has_one / has_many / belongs_to with the reference field name in `via`;
+  direction is from the entity that owns the reference field. Ownership root is the Team —
+  every first-class object is team-scoped, and the API credential pair is issued per team.
+
+identifier_grammar:
+  - {entity: Design, form: opaque short hash, example: '3pqqql', field: hash, note: 'Designs and templates are addressed by hash in REST paths ({templateHash}, {design_hash}); the schema also exposes an integer id.'}
+  - {entity: DesignSize, form: opaque short hash, example: 'lpp55x', field: hash}
+  - {entity: Export, form: uuid, example: 'b46adaed-39df-41a2-89e5-beb870282414', field: id}
+  - {entity: Creative, form: uuid, example: 'fc188412-c614-4db7-b611-f725e73cb36d', field: id}
+  - {entity: Project, form: integer, field: id}
+  - {entity: Folder, form: integer, field: id}
+  - {entity: BrandKit, form: integer, field: id}
+  - {entity: TeamUser, form: integer, field: userId}
+  - {entity: TeamWebhook, form: integer, field: id}
+  - {entity: ShareLink, form: opaque short hash, example: 'zdow6r'}
+
+domains:
+  identity: [Team, TeamUser, TeamRole, ByUser]
+  organization: [Project, Folder]
+  brand: [BrandKit, BrandKitColorPalette, BrandKitColor, BrandKitFont, Media, MediaFolder, Typography]
+  creative: [Design, TemplateListItem, TemplateElement, DesignSize, DesignVersionHistory]
+  production: [Export, Download, ExportCreative, DownloadCreative, ElementChanges, ApiVariable]
+  distribution: [AdNetwork, AdTagDesignSettings, ShareLinkResult]
+  measurement: [AbTestItem, AbTestDesign, PublicAdTagReportRecord, AdTagReportBreakdown]
+  collaboration: [CommentThread, Comment, CommentAttachments]
+  commerce: [SubscriptionInfo, SubscriptionAddon, CreditBalance, CreditLimit, CreditOperation, AccountDetails]
+  eventing: [TeamWebhook, TeamWebhookAction, TeamWebhookActionType]
+  import: [FigmaStatusPayload, JsonDesign, ParseStatus]
+
+entities:
+  - {name: Team, id: id (Int), domain: identity, description: The billing and permission boundary. API credentials, rate limits, credits, webhooks and brand kits are all team-scoped.}
+  - {name: TeamUser, id: userId (Int), domain: identity, description: A user on a team, carrying email, profilePicture, role and teamRoleId. Admin access is required to create, delete or re-role team users.}
+  - {name: TeamRole, id: id (Int), domain: identity, description: A named role (id, name, description) assignable to a team user.}
+  - {name: Project, id: id (Int), domain: organization, description: Container for designs and folders; optionally bound to one BrandKit and carrying name, color, description and createdBy.}
+  - {name: Folder, id: id (Int), domain: organization, description: Nestable folder inside a project (parentId, isParent) holding designs.}
+  - {name: BrandKit, id: id (Int), domain: brand, description: The brand system — brandName, website, voice, tone, typography, color palettes, fonts, logos, assets and brand templates.}
+  - {name: BrandKitColorPalette, id: id (Int), domain: brand, description: A named palette of BrandKitColor entries inside a brand kit.}
+  - {name: BrandKitColor, id: hex, domain: brand, description: A single named hex color in a palette.}
+  - {name: BrandKitFont, id: id (Int), domain: brand, description: An uploaded font (family, subFamily, weight, version, fontFamilyUrl, fontFaceUrl).}
+  - {name: Media, id: id (Int) / hash, domain: brand, description: A media asset or logo (type, format, size, width, height, duration, status, url, checksum).}
+  - {name: MediaFolder, id: id (Int), domain: brand, description: A nestable folder for brand-kit logos, assets or templates, discriminated by MediaFolderType.}
+  - {name: Design, id: hash (String) / id (Int), domain: creative, description: A creative document. Designs marked isTemplate act as templates; apiGenerated flags designs produced through the API.}
+  - {name: TemplateElement, id: name, domain: creative, description: A named, editable layer inside a template (layerType, value, visible, slideNumber, gotoUrl) — the substitution target for creative generation.}
+  - {name: DesignSize, id: hash (String), domain: creative, description: One size variant of a design set (name, kind, width, height, measureUnit).}
+  - {name: DesignVersionHistory, id: id (String), domain: creative, description: A saved version of a design size (versionName, lastModified, lastModifiedByName, sizeHash).}
+  - {name: Export, id: id (UUID), domain: production, description: An asynchronous export operation carrying type, status, errorLog, applied elementsChanges, variables and the creatives it produced.}
+  - {name: Download, id: id (UUID), domain: production, description: The deprecated predecessor of Export with the same shape; the download query is marked deprecated in the schema.}
+  - {name: Creative, id: id (UUID), domain: production, description: One rendered output of an export (one per size in a set), with status and a presigned S3 url.}
+  - {name: ApiVariable, id: name, domain: production, description: A name/value custom variable attached to an API-driven generation request.}
+  - {name: AdNetwork, id: id (Int), domain: distribution, description: An ad network target (adTag, html5, status flags) available for ad serving or HTML5 export.}
+  - {name: AdTagDesignSettings, id: design hash, domain: distribution, description: Ad-serving configuration for a design (useAsClickTag, responsiveScaling, url, target, networkIds).}
+  - {name: ShareLink, id: share hash, domain: distribution, description: A shareable URL for a template or design, optionally with review comments attached.}
+  - {name: AbTestItem, id: id (Int), domain: measurement, description: An A/B test grouping design variants for the team.}
+  - {name: CommentThread, id: id (Int), domain: collaboration, description: A review thread anchored to a designHash with hotspot type, position, access, resolved and read state.}
+  - {name: Comment, id: id (Int), domain: collaboration, description: A message inside a comment thread, with author and attachments.}
+  - {name: SubscriptionInfo, id: id (Int), domain: commerce, description: The team subscription (planCode, planVersion, period bounds, addons, creditBalance).}
+  - {name: CreditOperation, id: id (Int), domain: commerce, description: A billable operation and its credit cost (featureName, featureType, cost).}
+  - {name: TeamWebhook, id: id (Int), domain: eventing, description: A team webhook subscription (name, webhookUrl) bound to one or more action types.}
+  - {name: TeamWebhookActionType, id: id (Int), domain: eventing, description: A subscribable event type (name such as comment/create, description, config).}
+
+relationships:
+  - {from: Team, to: TeamUser, type: has_many, via: teamId}
+  - {from: TeamUser, to: TeamRole, type: belongs_to, via: teamRoleId}
+  - {from: Team, to: Project, type: has_many, via: teamId}
+  - {from: Team, to: BrandKit, type: has_many, via: teamId}
+  - {from: Team, to: TeamWebhook, type: has_many, via: teamWebhooks}
+  - {from: Team, to: SubscriptionInfo, type: has_one, via: getSubscriptionInfo(teamId)}
+  - {from: Team, to: AbTestItem, type: has_many, via: abTests}
+  - {from: Project, to: BrandKit, type: has_one, via: brandKit}
+  - {from: Project, to: Folder, type: has_many, via: projectId}
+  - {from: Project, to: TeamUser, type: has_many, via: projectUsers}
+  - {from: Folder, to: Folder, type: has_many, via: parentId, note: Self-referential nesting.}
+  - {from: Folder, to: Design, type: has_many, via: folderId}
+  - {from: Design, to: Project, type: belongs_to, via: projectId}
+  - {from: Design, to: Folder, type: belongs_to, via: folderId}
+  - {from: Design, to: BrandKit, type: belongs_to, via: brandkitId}
+  - {from: Design, to: TemplateElement, type: has_many, via: elements}
+  - {from: Design, to: DesignSize, type: has_many, via: designSizes(templateHash)}
+  - {from: Design, to: DesignVersionHistory, type: has_many, via: designVersionsHistory}
+  - {from: Design, to: CommentThread, type: has_many, via: designHash}
+  - {from: Design, to: AdTagDesignSettings, type: has_one, via: design hash}
+  - {from: CommentThread, to: Comment, type: has_many, via: threadId}
+  - {from: BrandKit, to: BrandKitColorPalette, type: has_many, via: brandKitColorPalettes}
+  - {from: BrandKitColorPalette, to: BrandKitColor, type: has_many, via: colors}
+  - {from: BrandKit, to: BrandKitFont, type: has_many, via: fonts}
+  - {from: BrandKit, to: Typography, type: has_one, via: typography}
+  - {from: BrandKit, to: Media, type: has_many, via: brandKitMedia / brandKitLogos}
+  - {from: BrandKit, to: MediaFolder, type: has_many, via: brandKitFolders / brandkitMediaFolders}
+  - {from: MediaFolder, to: MediaFolder, type: has_many, via: parentId, note: Self-referential nesting.}
+  - {from: BrandKit, to: Design, type: has_many, via: brandTemplates, note: Templates are now managed under Brand Kits as Brand Templates rather than the legacy /v1/templates route.}
+  - {from: Export, to: Creative, type: has_many, via: creatives}
+  - {from: Export, to: Design, type: belongs_to, via: templateHash, note: An export is generated FROM a template and also CREATES a new design when element changes are applied.}
+  - {from: Export, to: ApiVariable, type: has_many, via: variables}
+  - {from: Export, to: ElementChanges, type: has_one, via: elementsChanges}
+  - {from: AdTagDesignSettings, to: AdNetwork, type: has_many, via: networkIds}
+  - {from: AbTestItem, to: Design, type: has_many, via: designs}
+  - {from: TeamWebhook, to: TeamWebhookAction, type: has_many, via: actions}
+  - {from: TeamWebhookAction, to: TeamWebhookActionType, type: belongs_to, via: actionId}
+  - {from: SubscriptionInfo, to: SubscriptionAddon, type: has_many, via: addons}
+  - {from: SubscriptionInfo, to: CreditBalance, type: has_one, via: creditBalance}
+  - {from: CreditBalance, to: CreditLimit, type: has_one, via: creditsLimit}
+
+core_flow:
+  name: template to served ad
+  steps:
+    - Pick a template (Design where isTemplate) and read its editable TemplateElements.
+    - Submit element changes to generate an Export; each requested DesignSize yields one Creative.
+    - Poll the Export/Creative status or receive the webhookUrl callback; download the presigned S3 url.
+    - Optionally enable an ad tag on the resulting design and generate network-specific code or a CSV/XLSX trafficking file.
+    - Read delivery back through the ad tag report, broken down by project, design, network, size, day or month.
+
+cross_links:
+  graphql: graphql/thebrief-public.graphql
+  conventions: conventions/thebrief-conventions.yml
+  webhooks: asyncapi/thebrief-webhooks.yml

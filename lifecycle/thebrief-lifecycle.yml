@@ -1,0 +1,117 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.thebrief.ai/the-brief
+docs:
+  - https://docs.thebrief.ai/the-brief
+  - https://docs.thebrief.ai/public-api/rest-api
+  - https://docs.thebrief.ai/public-api/rest-api/templates-designs
+summary: >-
+  The Brief versions its REST API with a single path segment (/v1) and is mid-migration from
+  the legacy Creatopy-branded API. It publishes a real, dated-in-words deprecation NOTICE with
+  a grace period for the old domain, and its GraphQL schema carries machine-readable
+  @deprecated markers on six fields. What it does NOT publish is a written deprecation POLICY,
+  a status page, a changelog, a roadmap, or an SLA — all four were probed and all four missed.
+
+versioning:
+  scheme: path
+  current: v1
+  base_url: https://api.thebrief.ai/v1
+  graphql_endpoint: https://graphql.thebrief.ai/public
+  graphql_versioning: unversioned (single /public endpoint; evolution handled by @deprecated fields)
+  header_versioning: false
+  date_versioning: false
+
+deprecation:
+  policy_documented: false
+  policy_note: >-
+    There is no published deprecation/sunset policy — no notice period commitment, no
+    RFC 8594 Sunset or Deprecation response headers, no removal calendar. What exists is a
+    single in-docs deprecation announcement plus schema-level @deprecated markers.
+  sunset_headers: {documented: false, standard: RFC 8594}
+
+  announcements:
+    - id: creatopy-api-domain-deprecation
+      subject: The Creatopy-branded Public API (api.creatopy.com)
+      status: deprecated, in grace period
+      announced_at: undated in the documentation
+      published_text: >-
+        "Creatopy version of our API is now officially deprecated but will continue to function
+        during this grace period to support a smooth transition. Existing integrations will keep
+        working, but we strongly recommend updating them according to this new documentation.
+        The differences between the old and new versions are minimal: the structure and
+        functionality remain unchanged, with the only update being the domain change for endpoints."
+      source: https://docs.thebrief.ai/the-brief
+      migration:
+        from_host: https://api.creatopy.com
+        to_host: https://api.thebrief.ai
+        breaking: false
+        note: >-
+          Documented as a host swap only — path structure and functionality unchanged.
+          Verified 2026-08-12: api.creatopy.com still resolves and answers (404 on unknown
+          paths from the same Express application that serves api.thebrief.ai), consistent
+          with the stated grace period.
+      end_of_grace_period: not published
+
+    - id: templates-endpoint-superseded
+      subject: 'GET /v1/templates (Templates) superseded by Brand Templates'
+      status: superseded, still served
+      published_text: >-
+        "Templates are now managed under Brand Kits as Brand Templates, rather than through this
+        Templates endpoint. For template-related operations, use the designated Brand Templates
+        endpoint. For design-related operations, use the corresponding Designs endpoint."
+      source: https://docs.thebrief.ai/public-api/rest-api/templates-designs
+      replacement:
+        - https://api.thebrief.ai/v1/brandkits/templates
+        - https://api.thebrief.ai/v1/designs
+
+  machine_readable_deprecations:
+    source: graphql/thebrief-public.graphql
+    note: >-
+      Six fields carry a GraphQL @deprecated directive with a stated replacement — the only
+      machine-readable deprecation signal The Brief publishes. An agent can read these directly
+      from introspection.
+    fields:
+      - {type: Query, field: download, reason: "Use 'export' query instead."}
+      - {type: Query, field: searchTemplates, reason: "Use 'templates' query instead."}
+      - {type: Query, field: adNetworks, reason: "Use 'adNetworksForAdserving' or 'adNetworksForHTML' query instead."}
+      - {type: Query, field: brandkitMediaFolders, reason: 'Use brandKitFolders(type: media) instead. Returns a flat array; the new query returns breadcrumb path info.'}
+      - {type: Mutation, field: renameBrandKit, reason: 'Use updateBrandKit instead'}
+      - {type: ExportSettings, field: exportMp4V3, reason: 'MP4 V3 is now the only export path; this field is ignored and will be removed in a future version.'}
+
+status_page:
+  published: false
+  probes:
+    - {url: 'https://status.thebrief.ai/', status: 404}
+    - {url: 'https://thebrief.statuspage.io', status: 200, note: 'Redirects to atlassian.com/software/statuspage — the Statuspage marketing site, not a tenant. Not a status page for this provider.'}
+  note: No public uptime/incident page was found on any The Brief host.
+
+changelog:
+  published: false
+  probes:
+    - {url: 'https://www.thebrief.ai/changelog/', status: 404}
+    - {url: 'https://docs.thebrief.ai/changelog', status: 404}
+    - {url: 'https://www.thebrief.ai/whats-new/', status: 404}
+  note: >-
+    No dated API changelog or release notes. The docs site (GitBook) exposes 57 pages in its
+    sitemap, none of which is a changelog. Product news is published as blog posts at
+    https://www.thebrief.ai/blog/ but is not an API change record.
+
+roadmap:
+  published: false
+  probe: {url: 'https://www.thebrief.ai/roadmap/', status: 404}
+
+sla:
+  published: false
+  note: >-
+    "Priority SLAs" are named as an Enterprise contract feature on the pricing page, but no
+    numeric availability target or credit schedule is published.
+  source: https://www.thebrief.ai/pricing/
+
+support:
+  help_center: https://help.thebrief.ai/
+  note: 'Zendesk-hosted; returned 403 to an automated probe on 2026-08-12 (bot challenge), reachable in a browser.'
+
+cross_links:
+  conventions: conventions/thebrief-conventions.yml
+  graphql: graphql/thebrief-public.graphql
+  errors: errors/thebrief-error-codes.yml

@@ -1,0 +1,92 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.thebrief.ai/public-api/rest-api/webhooks
+docs:
+  - https://docs.thebrief.ai/public-api/rest-api/webhooks
+  - https://docs.thebrief.ai/public-api/rest-api/webhooks/webhook-action-types
+  - https://docs.thebrief.ai/public-api/rest-api/exports
+summary: >-
+  The Brief ships a real, managed webhook surface: team-level webhook subscriptions created
+  through the Public API (or the equivalent GraphQL mutations), bound to a server-side catalogue
+  of action types the API itself enumerates. No AsyncAPI document is published — this artifact
+  captures the webhook catalogue as the provider documents it. NOTHING HERE IS SYNTHESISED
+  INTO AN ASYNCAPI SPEC; an AsyncAPI file would be fabrication.
+
+asyncapi_published: false
+asyncapi_probe:
+  - {url: 'https://api.thebrief.ai/asyncapi.yaml', status: 404}
+  - {url: 'https://docs.thebrief.ai/asyncapi.yaml', status: 404}
+
+transport: https-post-callback
+delivery_model: team-scoped subscription
+signature_verification:
+  documented: false
+  note: >-
+    No signing secret, HMAC header or replay-protection mechanism is documented for inbound
+    webhook deliveries. Consumers cannot cryptographically verify that a callback came from
+    The Brief — treat the endpoint as unauthenticated and validate payloads out of band.
+retry_policy:
+  documented: false
+delivery_guarantees:
+  documented: false
+
+management_api:
+  rest:
+    - {method: GET,    path: 'https://api.thebrief.ai/v1/webhooks',       operation: List team webhooks}
+    - {method: POST,   path: 'https://api.thebrief.ai/v1/webhooks',       operation: Create team webhook, body: [name, url, actions]}
+    - {method: DELETE, path: 'https://api.thebrief.ai/v1/webhooks',       operation: Delete team webhook}
+    - {method: GET,    path: 'https://api.thebrief.ai/v1/webhookActions', operation: List available webhook action types}
+  graphql:
+    queries: [teamWebhooks, teamWebhookActions]
+    mutations: [createTeamWebhook, updateTeamWebhook, deleteTeamWebhook]
+    source: graphql/thebrief-public.graphql
+
+subscription_object:
+  fields:
+    - {name: id, type: number, description: The webhook id.}
+    - {name: name, type: string, description: The name of the webhook.}
+    - {name: webhookUrl, type: string, description: The destination URL The Brief POSTs to.}
+    - {name: createdAt, type: date}
+    - {name: createdByUser, type: object, fields: [id, name]}
+    - {name: actions, type: array, description: The action types this webhook is subscribed to, each with actionId, createdAt, createdByUser and the action object (id, name, description, config, createdAt).}
+  note: >-
+    A webhook is created with an actions array of numeric action ids (documented example [1, 5]);
+    the id-to-name mapping is discovered at runtime from GET /v1/webhookActions rather than
+    published as a static list.
+
+action_types:
+  discovery: GET https://api.thebrief.ai/v1/webhookActions
+  catalogue_is_dynamic: true
+  note: >-
+    The full action catalogue is only enumerable at runtime against a live account. The two
+    entries below are the ones The Brief publishes verbatim in its own documented response
+    example — they are recorded as documented examples, not as the complete catalogue.
+  documented_examples:
+    - {id: 1, name: 'comment/create', description: Comment created, config: null}
+    - {id: 5, name: 'session/finish', description: Session finished, config: null}
+  naming_convention: '<resource>/<verb> (lower-case, slash-separated)'
+
+export_callbacks:
+  note: >-
+    Separate from team webhooks, the export endpoints accept a per-request webhookUrl parameter
+    that The Brief calls when an asynchronous export finishes. This is a one-shot callback tied
+    to a single export, not a subscription.
+  parameter: webhookUrl
+  applies_to:
+    - POST https://api.thebrief.ai/v1/export
+    - POST https://api.thebrief.ai/v1/export-with-changes
+  terminal_states: [complete, completeWithError, failed]
+
+third_party_consumption:
+  zapier:
+    published: true
+    note: >-
+      The Brief publishes a Zapier app with both a native trigger and a webhook trigger, so
+      the event surface is consumable without writing a receiver.
+    invite: https://zapier.com/developer/public-invite/171524/395880/e4a19ddb7cd42ee4a1865a84fd887187
+    docs: https://docs.thebrief.ai/zapier-integration
+
+cross_links:
+  conventions: conventions/thebrief-conventions.yml
+  authentication: authentication/thebrief-authentication.yml
+  data_model: data-model/thebrief-data-model.yml

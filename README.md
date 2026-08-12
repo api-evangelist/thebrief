@@ -42,6 +42,38 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-TheBrief is a company surfaced as a portfolio company of point-nine and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+The Brief (formerly Creatopy) is an AI-powered advertising creation platform for brands and
+agencies — Ad Studio, AI generation, a native ad server, and direct publishing to Meta, Google Ads,
+CM360, DV360 and Veeva. Founded 2021, based in Romania, backed by Point Nine.
 
-Backed by: point-nine — https://www.creatopy.com
+## API surface
+
+The Brief ships a documented **Public API** on two co-equal surfaces:
+
+| Surface | Base | Contract |
+|---|---|---|
+| REST | `https://api.thebrief.ai/v1` | Documented only (no OpenAPI published) |
+| GraphQL | `https://graphql.thebrief.ai/public` | **Live schema** — anonymous introspection returns 186 types, 48 queries, 49 mutations |
+
+Documentation: <https://docs.thebrief.ai/public-api> · Postman:
+<https://www.postman.com/thebrieftechnical/the-brief-api/collection/1lfct1g/graphql-api>
+
+Authentication is a JWT bearer token minted from a `clientId`/`clientSecret` pair created in-app
+under *Manage account > API credentials*. The same signed token drives the **App Integration**
+flow, which embeds the Ad Studio editor inside a customer's own product. There is also a team
+**webhook** surface, a **Zapier** app and a **Figma** plugin.
+
+## What this profile captures
+
+`graphql/` holds the SDL rendered verbatim from the live introspection response, alongside the raw
+JSON. `authentication/`, `conventions/`, `errors/`, `rate-limits/`, `lifecycle/`, `data-model/`,
+`conformance/`, `components/`, `asyncapi/` (webhooks) and `plans/` are read from the provider's own
+documentation and schema. `skills/` packages four agent-facing flows, each grounded in operation
+names verified in that schema.
+
+**Notable gaps, all recorded with evidence:** no OpenAPI, no `/.well-known/` documents on any host,
+no `security.txt`, no MCP server, no A2A agent card, no status page, no changelog, no roadmap, no
+first-party SDK in any package registry, no idempotency key, and no `RateLimit-*` / `Retry-After`
+response headers despite published numeric limits.
+
+Backed by: point-nine — https://www.thebrief.ai

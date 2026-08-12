@@ -1,18 +1,68 @@
-generated: '2026-07-21'
-method: searched
-source: https://www.thebrief.ai/.well-known/
-host: https://www.thebrief.ai
+generated: '2026-08-12'
+method: probed
+source: live HTTP probes of every The Brief host named in apis.yml, the API base URLs and the docs host
+supersedes: 'probe of 2026-07-21, which covered only https://www.thebrief.ai'
+summary: >-
+  The Brief serves NO /.well-known/ discovery documents on any host it controls. This round
+  widened the probe from the marketing host alone to all five real hosts — the marketing site,
+  the REST API host, the GitBook docs host, the application host and the GraphQL host — and every
+  standards-defined path missed. No WellKnown, SecurityTxt, AgentCard or APICatalog pointer is
+  emitted in apis.yml, because the probe records an absence and a pointer would assert a presence.
+hosts_probed:
+  - https://www.thebrief.ai
+  - https://api.thebrief.ai
+  - https://docs.thebrief.ai
+  - https://app.thebrief.ai
+  - https://graphql.thebrief.ai
+
 documents:
-  - path: /.well-known/security.txt
-    status: 404
-  - path: /.well-known/openid-configuration
-    status: 404
-  - path: /.well-known/oauth-authorization-server
-    status: 404
-  - path: /.well-known/api-catalog
-    status: 404
-  - path: /.well-known/ai-plugin.json
-    status: 404
-notes: >-
-  The Brief (formerly Creatopy) publishes no /.well-known/ discovery documents.
-  A verbatim /llms.txt IS published and is captured at llms/thebrief-llms.txt.
+  - {host: 'https://www.thebrief.ai', path: /.well-known/security.txt, status: 404}
+  - {host: 'https://www.thebrief.ai', path: /.well-known/openid-configuration, status: 404}
+  - {host: 'https://www.thebrief.ai', path: /.well-known/oauth-authorization-server, status: 404}
+  - {host: 'https://www.thebrief.ai', path: /.well-known/api-catalog, status: 404}
+  - {host: 'https://www.thebrief.ai', path: /.well-known/ai-plugin.json, status: 404}
+  - {host: 'https://www.thebrief.ai', path: /.well-known/agent-card.json, status: 404}
+  - {host: 'https://www.thebrief.ai', path: /.well-known/agent.json, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/security.txt, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/openid-configuration, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/oauth-authorization-server, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/oauth-protected-resource, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/api-catalog, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/ai-plugin.json, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/agent-card.json, status: 404}
+  - {host: 'https://api.thebrief.ai', path: /.well-known/agent.json, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/security.txt, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/openid-configuration, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/oauth-authorization-server, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/api-catalog, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/ai-plugin.json, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/agent-card.json, status: 404}
+  - {host: 'https://docs.thebrief.ai', path: /.well-known/agent.json, status: 404}
+
+false_positives:
+  - host: https://app.thebrief.ai
+    paths: [/.well-known/security.txt, /.well-known/openid-configuration, /.well-known/oauth-authorization-server, /.well-known/oauth-protected-resource, /.well-known/api-catalog, /.well-known/ai-plugin.json, /.well-known/agent-card.json, /.well-known/agent.json, /.well-known/mcp.json]
+    status: 200
+    verdict: NOT A DOCUMENT
+    note: >-
+      The application host is a single-page app whose catch-all route answers 200 with the same
+      HTML shell (<!doctype html><html lang="en">…) for every /.well-known/* path, including
+      paths that cannot exist. None of these is a served document and none is counted.
+  - host: https://graphql.thebrief.ai
+    paths: [/.well-known/*]
+    status: 400
+    verdict: NOT A DOCUMENT
+    note: >-
+      The GraphQL host answers every path with the Apollo CSRF-prevention error
+      ("This operation has been blocked as a potential Cross-Site Request Forgery").
+
+related_discovery_documents_served_elsewhere:
+  note: >-
+    The Brief does publish machine-readable discovery, just not under /.well-known/ — two
+    llms.txt documents and an open GraphQL introspection endpoint. Those are captured in
+    llms/ and graphql/ respectively.
+  documents:
+  - {url: 'https://www.thebrief.ai/llms.txt', status: 200, file: ../llms/thebrief-llms.txt}
+  - {url: 'https://docs.thebrief.ai/llms.txt', status: 200, file: ../llms/thebrief-docs-llms.txt}
+  - {url: 'https://docs.thebrief.ai/sitemap.xml', status: 200, note: 57 documentation pages}
+  - {url: 'https://graphql.thebrief.ai/public', status: 200, note: 'anonymous __schema introspection; see ../graphql/'}

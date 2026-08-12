@@ -1,0 +1,48 @@
+generated: '2026-08-12'
+method: generated
+source: >-
+  Packaged Agent Skills for The Brief Public API. The Brief publishes no OpenAPI, so every step
+  is grounded instead in the live GraphQL schema at graphql/thebrief-public.graphql (anonymous
+  introspection, 2026-08-12) and the REST reference at https://docs.thebrief.ai/public-api —
+  every operation name, path, enum value and parameter cited in these skills was read verbatim
+  from one of those two sources. Cross-cutting rules cite ../conventions/, ../errors/,
+  ../rate-limits/, ../authentication/ and ../plans/.
+grounding:
+  schema: graphql/thebrief-public.graphql
+  docs: https://docs.thebrief.ai/public-api
+  rest_base: https://api.thebrief.ai/v1
+  graphql_endpoint: https://graphql.thebrief.ai/public
+skills:
+  - file: thebrief-generate-ad-variations.md
+    name: Generate ad variations from a The Brief template
+    surfaces: [rest, graphql]
+    operations: [templates, templateElements, designSizes, generateCreative, export, listCreditOperations]
+  - file: thebrief-serve-and-report-ad-tags.md
+    name: Serve a design as an ad tag and read its delivery report
+    surfaces: [rest, graphql]
+    operations: [adNetworksForAdServing, adNetworksForHTML, adTagEnable, adTagDisable, adTagUpdateSettings, adTagGenerateCode, adTagGenerateFile, adTagReportData]
+  - file: thebrief-subscribe-to-webhooks.md
+    name: Subscribe to The Brief team webhooks
+    surfaces: [rest, graphql]
+    operations: [teamWebhookActions, teamWebhooks, createTeamWebhook, updateTeamWebhook, deleteTeamWebhook]
+  - file: thebrief-embed-editor-session.md
+    name: Embed The Brief editor in your own product
+    surfaces: [app-integration]
+    operations: [tokenAuth session JWT, sessionStarted message, sessionEnded message]
+provider_published_skills:
+  searched: true
+  found: false
+  note: >-
+    No provider-authored AGENTS.md, skills manifest or agent instructions were found on any
+    The Brief host. The closest published agent-facing artifacts are the two llms.txt documents
+    captured in ../llms/.
+cross_cutting_rules:
+  authentication: ../authentication/thebrief-authentication.yml
+  conventions: ../conventions/thebrief-conventions.yml
+  errors: ../errors/thebrief-error-codes.yml
+  rate_limits: ../rate-limits/thebrief-rate-limits.yml
+  webhooks: ../asyncapi/thebrief-webhooks.yml
+  data_model: ../data-model/thebrief-data-model.yml
+  no_idempotency: >-
+    The Brief documents no idempotency key. Every skill that mutates state says so explicitly at
+    the point of mutation; do not add retry logic to these flows without external deduplication.

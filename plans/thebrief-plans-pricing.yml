@@ -1,0 +1,142 @@
+generated: '2026-08-12'
+method: searched
+source: https://www.thebrief.ai/pricing/
+provider: The Brief
+providerId: thebrief
+description: >-
+  The Brief prices by seat and workload tier, not by API call. All four published tiers include
+  the full Ad Studio, AI generation and export; the pricing page states plainly "no credits.
+  no counters. just plans" for the packaged tiers, while the API-side credit ledger
+  (/v1/credits/*) meters actual consumption. API access as a distribution channel is named
+  only under Enterprise ("Bulk distribution: API, white-label editor, CM360 / DV360 / Veeva"),
+  so there is no self-serve API-only plan and no published per-request price.
+currency: USD
+billing_periods: [monthly, annual]
+annual_discount: 26%
+plan_count: 4
+api_access:
+  self_serve: false
+  named_in_tier: Enterprise
+  note: >-
+    The feature comparison lists API-based bulk distribution under Enterprise. API credentials
+    themselves are created in-app under Manage account > API credentials; the pricing page does
+    not state which tiers may mint them, and no API-specific price is published.
+trial:
+  available: true
+  length_days: 7
+  card_required: false
+
+plans:
+  - id: create-pro
+    name: Create Pro
+    audience: individuals
+    price: 29
+    currency: USD
+    period: month
+    billing: annual
+    annual_total: 348
+    price_note: '$29/month billed annually at $348'
+    seats: 1
+    included:
+      designs: unlimited
+      storage: 250 GB
+      brand_kits: 5
+      workspaces: 1
+      ai_and_export: Included for individual usage
+      ad_serving_impressions: null
+      tracked_brands: 10
+      export_formats: [JPG, PNG, WEBP, GIF, HTML5, MP4, PDF, AMP]
+      integrations: [Shopify, Google Drive, Dropbox]
+    overage:
+      model: soft
+      note: '"We''ll reach out before any limit — never a surprise stop." No published overage rate.'
+
+  - id: amplify-ultra
+    name: Amplify Ultra
+    audience: individuals
+    price: 79
+    currency: USD
+    period: month
+    billing: annual
+    annual_total: 948
+    price_note: '$79/month billed annually at $948'
+    seats: 1
+    included:
+      inherits: create-pro
+      storage: 1 TB
+      brand_kits: 20
+      ai_and_export: Expanded capacity for power users
+      ad_serving_impressions: 100000 per month
+      ad_networks: 25+ plus publishing to Meta and Google Ads
+      tracked_brands: 15
+      extras: [AI Translate localization, automated A/B testing, shareable performance reports]
+    overage:
+      model: soft
+      note: '"We''ll reach out before any limit — never a surprise stop."'
+
+  - id: collaborate-team
+    name: Collaborate Team
+    audience: businesses
+    price: 49
+    currency: USD
+    period: month
+    unit: seat
+    billing: annual
+    annual_total: 588
+    price_note: '$49/seat/month billed annually at $588 per seat'
+    seats: 2-10
+    included:
+      inherits: create-pro
+      storage: 1 TB
+      brand_kits: 20
+      ai_and_export: Higher capacity for teams
+      ad_serving_impressions: 100000 per month
+      tracked_brands: 20
+      extras: [roles and permissions, real-time co-editing, version history, shared templates, team font library, locked elements]
+    overage:
+      model: soft
+
+  - id: scale-enterprise
+    name: Scale Enterprise
+    audience: businesses
+    price: null
+    price_model: custom
+    price_note: "Let's talk — monthly, quarterly or annual, usage-based, custom contract"
+    contact: https://www.thebrief.ai/pricing/
+    seats: flexible (11+)
+    included:
+      inherits: collaborate-team
+      storage: 1 TB
+      ai_and_export: Contractual usage terms
+      ad_serving_impressions: custom
+      tracked_brands: unlimited
+      distribution: [API, white-label editor, CM360, DV360, Veeva]
+      mass_production: [feeds, real-time data, A/B testing, sticky ads]
+      dam: [Bynder, Frontify, Orange Logic]
+      governance: [SSO, SAML, SCIM, custom roles, user groups, ISO audits]
+      reporting: [detailed usage tracking, automated email and Slack reports]
+      support: [dedicated account manager, priority SLAs, onboarding, contractual capacity]
+
+add_ons:
+  - id: agency-package
+    name: Agency Package
+    price: null
+    price_model: custom
+    description: >-
+      Layered on top of Team or Enterprise for agencies running campaigns for multiple brands —
+      Brand Kits per client, white-label exports, branded share links and per-client billing.
+
+credits:
+  note: >-
+    Packaged tiers are marketed as credit-free, but the API exposes a real credit ledger:
+    recurring, rolling and top-up credit pools with available / locked / consumed balances,
+    a per-operation credit cost list, and a team consumption report. Teams on a legacy plan
+    are excluded — every /v1/credits/* route returns 400 for them.
+  endpoints:
+    - GET https://api.thebrief.ai/v1/credits/subscription-info
+    - GET https://api.thebrief.ai/v1/credits/operations
+    - GET https://api.thebrief.ai/v1/credits/team-consumption-report
+  source: https://docs.thebrief.ai/public-api/rest-api/credits
+
+cross_links:
+  rate_limits: rate-limits/thebrief-rate-limits.yml

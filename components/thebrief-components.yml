@@ -1,0 +1,97 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.thebrief.ai/app-integration
+docs:
+  - https://docs.thebrief.ai/app-integration
+  - https://docs.thebrief.ai/app-integration/iframe-embedding
+summary: >-
+  The Brief's embeddable surface is the App Integration — the full Ad Studio / GenStudio editor
+  hosted by The Brief and dropped into a customer's own product as an authenticated, impersonated
+  session. It is not a component library: there is no npm loader, no web-component tag and no
+  element SDK. Integration is a signed JWT handed to a URL, and configuration is a sessionConfig
+  claim inside that token. This is the "white-label editor" the pricing page lists under Enterprise.
+distribution: hosted-iframe (no client library)
+loader_libraries: []
+note_on_packages: >-
+  Unlike a Stripe-Elements-style surface there is nothing to install. The only client-side code a
+  consumer writes is a JWT signing call (the docs use the Node.js `jsonwebtoken` library, a
+  third-party package, not a first-party SDK) and a window message listener.
+
+families:
+  embedded_editor:
+    description: >-
+      The Ad Studio / GenStudio editor rendered inside the customer's application. The customer
+      signs a session JWT with their API clientId + secret, naming the user to impersonate and the
+      action the session exists to perform, then loads it at a tokenAuth URL.
+    entry_points:
+      - {mode: redirect, url: 'https://app.thebrief.ai/tokenAuth?token=<jwt>', description: Full-page hand-off to the editor.}
+      - {mode: iframe, url: 'https://app-proxy.thebrief.ai/tokenAuth?token=<jwt>', description: 'Same flow inside an iframe; the app-proxy subdomain exists specifically to be framed.'}
+    editor_modes: [adstudio, genstudio]
+    session_actions:
+      - {type: create_blank_design, params: [sizes, projectId, folderId, editorMode]}
+      - {type: create_design_from_template, params: [hash, editorMode]}
+      - {type: edit_design, params: [hash, editorMode]}
+      - {type: get_share_link}
+    jwt_claims:
+      - {name: clientId, required: true, description: The API clientId from Manage account > API credentials.}
+      - {name: userId, required: true, description: The team user the session impersonates.}
+      - {name: action, required: true, description: The session action object (see session_actions).}
+      - {name: sessionConfig, required: false, description: Per-session UI/feature configuration (see configuration).}
+    signing: HS256 with the API client secret (documented with the Node.js jsonwebtoken library)
+
+  host_page_events:
+    description: >-
+      The iframe posts two window messages to the parent so the host application can track the
+      session boundary. The docs recommend checking event.origin against the app-proxy host.
+    events:
+      - {type: sessionStarted, payload: [sessionId, initToken]}
+      - {type: sessionEnded, payload: [sessionId]}
+    listener: 'window.addEventListener("message", handler) filtered on origin https://app-proxy.thebrief.ai'
+
+configuration:
+  object: sessionConfig
+  all_optional: true
+  feature_toggles:
+    - {name: useDownload, type: boolean, default: false, description: Allow downloading the design within the session.}
+    - {name: useShareButton, type: boolean, default: true, description: Show or hide the share button.}
+    - {name: useShareLinkComments, type: boolean, default: false, description: Allow comments on share links in the session.}
+    - {name: useAiEditText, type: boolean, default: true, description: Enable AI text editing.}
+    - {name: useAiEditImage, type: boolean, default: true, description: Enable AI image editing.}
+    - {name: useAiTranslate, type: boolean, default: true, description: Enable AI translation.}
+    - {name: useAdServing, type: boolean, default: false, description: Enable ad serving in the session.}
+    - {name: usePublishToMeta, type: boolean, default: false, description: Enable publishing to Meta.}
+    - {name: usePublishToGoogleAds, type: boolean, default: false, description: Enable publishing to Google Ads.}
+    - {name: brandkitIds, type: 'array<int>', default: '[]', description: Restrict which brand kits are visible in Ad Studio.}
+  toolbar_control:
+    mutually_exclusive: [hideToolbarItems, hideAllToolbarItemsExcept]
+    note: Supplying both makes the session fail to load the configuration.
+    supported_items: [templates, elements, brandKit, layers, slides, animator, feedTool, apps, resize, help]
+  documentation_defect:
+    note: >-
+      The published defaults table and the prose disagree on three toggles — the sessionConfig
+      example and the narrative describe useAiEditText / useAiEditImage / useAiTranslate as
+      defaulting true while the same page's table also lists false for useShareLinkComments and
+      true for useAiEditText. Recorded verbatim above from the properties table; callers should
+      set these explicitly rather than rely on the default.
+
+other_embed_surfaces:
+  - name: Share links
+    description: >-
+      Server-generated shareable URLs for a template or design, optionally carrying review
+      comments. Generated via POST /v1/shareLink/generate or the generateSharelink mutation.
+    docs: https://docs.thebrief.ai/public-api/rest-api/sharelink
+  - name: Served ad tags
+    description: >-
+      Ad-serving code generated per design and ad network, embedded on the publisher side.
+      Generated via POST /v1/adServing/{design_hash}/generate-code, or as a CSV/XLSX trafficking
+      file for CM360 / DV360 workflows.
+    docs: https://docs.thebrief.ai/public-api/rest-api/ad-serving
+
+third_party_integration_surfaces:
+  - {name: Zapier app, docs: 'https://docs.thebrief.ai/zapier-integration', note: 'Public invite app with native and webhook triggers; token scope ZAPIER.'}
+  - {name: Figma plugin, evidence: 'ApiTokenScope enum value FIGMA plus figmaMe / figmaProjects / figmaFolders / figmaStatus / canImportFigmaToProject queries and the processFigmaJson mutation in the public GraphQL schema.'}
+
+cross_links:
+  authentication: authentication/thebrief-authentication.yml
+  conventions: conventions/thebrief-conventions.yml
+  graphql: graphql/thebrief-public.graphql

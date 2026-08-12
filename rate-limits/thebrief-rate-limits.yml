@@ -1,0 +1,73 @@
+generated: '2026-08-12'
+method: searched
+source: https://docs.thebrief.ai/public-api
+docs:
+  - https://docs.thebrief.ai/public-api
+  - https://docs.thebrief.ai/public-api/rest-api/error-codes
+provider: The Brief
+providerId: thebrief
+description: >-
+  The Brief publishes two per-team rate limits on the Public API, split between export
+  routes and everything else. The numbers are documented; the runtime signal is not —
+  no RateLimit-*, X-RateLimit-* or Retry-After response header is described anywhere in
+  the documentation, so a client can only discover exhaustion by receiving a 429.
+limit_count: 2
+
+limits:
+  - name: Export routes
+    scope: team
+    metric: requests
+    limit: 15
+    window: 10 seconds
+    burst: null
+    applies_to:
+      - POST https://api.thebrief.ai/v1/export
+      - POST https://api.thebrief.ai/v1/export-with-changes
+    note: >-
+      Documented verbatim as "Export: 15 requests / 10 seconds / team". Exporting a design SET
+      counts as a single request, not one per size.
+  - name: All other routes
+    scope: team
+    metric: requests
+    limit: 100
+    window: 10 seconds
+    burst: null
+    applies_to:
+      - 'https://api.thebrief.ai/v1/* (non-export)'
+    note: 'Documented verbatim as "Rest of the routes: 100 requests / 10 seconds / team".'
+
+response:
+  exhaustion_status: 429
+  exhaustion_meaning: Too many requests.
+  headers:
+    documented: false
+    checked:
+      [RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Retry-After]
+    note: >-
+      None of these are documented. This is the single biggest agent-readiness gap on The
+      Brief's API: the limit is knowable at design time but not at runtime, so an autonomous
+      client cannot pace itself and must treat 429 as the only feedback channel.
+  retry_guidance:
+    documented: false
+    note: No documented backoff or retry policy; combined with the absence of idempotency keys, retries on export routes risk duplicate designs and duplicate credit spend.
+
+graphql:
+  endpoint: https://graphql.thebrief.ai/public
+  documented_limits: false
+  note: >-
+    No separate GraphQL rate limit is published. The schema exposes an InputApiRateLimit input
+    type (group, requestTimesPerDuration, cacheDuration), showing the platform models per-group
+    request-times-per-duration limits internally, but no values are published.
+  source: graphql/thebrief-public.graphql (input InputApiRateLimit)
+
+quota_vs_rate:
+  note: >-
+    Distinct from rate limiting, API work consumes team CREDITS. Credit balance and per-operation
+    credit cost are readable at GET /v1/credits/subscription-info and GET /v1/credits/operations.
+    Ad-serving impressions are capped per plan (100,000/month on Ultra and Team, custom on Enterprise).
+  see: plans/thebrief-plans-pricing.yml
+
+cross_links:
+  conventions: conventions/thebrief-conventions.yml
+  errors: errors/thebrief-error-codes.yml
+  plans: plans/thebrief-plans-pricing.yml

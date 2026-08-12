@@ -1,38 +1,45 @@
 aid: thebrief
 name: TheBrief
 description: >-
-  The Brief (formerly Creatopy) is an AI-powered advertising creation platform
-  that helps brands and agencies discover, create, launch, and optimize ads at
-  scale. Its Ad Studio, AI agents (Discover, Create, Optimize), and native ad
-  server generate on-brand creatives, resize a single design into 50+ ad
-  formats, publish directly to networks like Meta, Google Ads, and Veeva, and
-  optimize campaign performance with data-backed recommendations. Founded in
-  2021 and based in Romania, The Brief is a portfolio company of Point Nine.
-  This profile documents the company's public web, marketing, and legal surface;
-  no public developer API, OpenAPI, SDK, or webhook surface has been found as of
-  this enrichment pass.
+  The Brief (formerly Creatopy) is an AI-powered advertising creation platform that helps
+  brands and agencies discover, create, launch, and optimize ads at scale. Its Ad Studio,
+  AI agents (Discover, Create, Optimize), and native ad server generate on-brand creatives,
+  resize a single design into 50+ ad formats, publish directly to networks like Meta, Google
+  Ads, CM360, DV360 and Veeva, and optimize campaign performance with data-backed
+  recommendations. Founded in 2021 and based in Romania, The Brief is a portfolio company of
+  Point Nine. It ships a documented Public API on two co-equal surfaces — a REST API at
+  https://api.thebrief.ai/v1 and a single GraphQL endpoint at https://graphql.thebrief.ai/public
+  whose 186-type schema is readable by anonymous introspection — covering designs and templates,
+  brand kits, projects and folders, exports and creatives, ad serving and ad-tag reporting, team
+  users and roles, credits, and team webhooks. Authentication is a JWT bearer token minted from a
+  clientId/clientSecret pair; the same signed token powers the App Integration flow that embeds
+  the Ad Studio editor inside a customer's own product. No OpenAPI is published.
 url: https://raw.githubusercontent.com/api-evangelist/thebrief/refs/heads/main/apis.yml
 accessModel:
-  pricing: unknown
-  onboarding: unknown
-  trial: false
-  try_now: false
-  public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  pricing: paid
+  onboarding: self-service
+  trial: true
+  try_now: true
+  public: true
+  label: Self-service with free trial
+  confidence: high
+  source:
+  - https://www.thebrief.ai/pricing/
+  - https://docs.thebrief.ai/public-api
+  generated: '2026-08-12'
+  method: searched
+  note: >-
+    7-day free trial, no card required. Packaged tiers from $29/month; API-based bulk
+    distribution is named as an Enterprise contract feature and API credentials are minted
+    in-app under Manage account > API credentials.
 image: https://cdn.sanity.io/images/8wzdrx7x/production/d9d93597b665708876d106aed92e87d0addafc41-760x175.svg
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - point-nine
-x-tier: stub
-x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-12'
 tags:
 - Company
 - Advertising
@@ -42,7 +49,65 @@ tags:
 - Marketing
 - Ad Serving
 - SaaS
-apis: []
+- GraphQL
+- Creative Automation
+- Digital Asset Management
+- Webhooks
+apis:
+- name: The Brief Public REST API
+  description: >-
+    The Brief's versioned REST API for creative automation — list and search designs, templates
+    and brand templates, read a template's editable elements and size variants, submit exports
+    with element changes and collect the rendered creatives, manage projects, folders, brand kits
+    (colors, fonts, logos, assets, media folders), team users and roles, share links, design
+    versions, credits and team webhooks, and drive The Brief's native ad server (enable/disable
+    ad tags, update settings, generate network code or CM360/DV360 CSV/XLSX trafficking files,
+    and pull delivery reports). JWT bearer auth, cursor pagination, a "response" envelope, and a
+    published 15 req/10s (export) / 100 req/10s (everything else) per-team rate limit.
+  humanURL: https://docs.thebrief.ai/public-api/rest-api
+  baseURL: https://api.thebrief.ai/v1
+  tags:
+  - Advertising
+  - Creative Automation
+  - Ad Serving
+  - Design
+  properties:
+  - type: Documentation
+    url: https://docs.thebrief.ai/public-api/rest-api
+  - type: APIReference
+    url: https://docs.thebrief.ai/public-api/rest-api
+  - type: Authentication
+    url: authentication/thebrief-authentication.yml
+  - type: ErrorCatalog
+    url: errors/thebrief-error-codes.yml
+  - type: RateLimits
+    url: rate-limits/thebrief-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/thebrief-webhooks.yml
+- name: The Brief Public GraphQL API
+  description: >-
+    A single POST GraphQL endpoint exposing the same data core as the REST API with arbitrary
+    field selection — 48 queries and 49 mutations across designs, templates, brand kits, projects,
+    folders, exports and downloads, ad networks and ad tags, A/B tests, comments, team users and
+    roles, webhooks, credits and the Figma import pipeline. Anonymous __schema introspection is
+    open (verified HTTP 200, 2026-08-12); executing operations requires a JWT bearer token. Six
+    fields carry @deprecated directives with stated replacements — the only machine-readable
+    deprecation signal The Brief publishes.
+  humanURL: https://docs.thebrief.ai/public-api/graphql
+  baseURL: https://graphql.thebrief.ai/public
+  tags:
+  - GraphQL
+  - Advertising
+  - Creative Automation
+  properties:
+  - type: GraphQL
+    url: graphql/thebrief-public.graphql
+  - type: Documentation
+    url: https://docs.thebrief.ai/public-api/graphql
+  - type: Authentication
+    url: authentication/thebrief-authentication.yml
+  - type: Postman
+    url: https://www.postman.com/thebrieftechnical/the-brief-api/collection/1lfct1g/graphql-api
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -61,6 +126,8 @@ common:
   url: https://www.thebrief.ai/blog/
 - type: Pricing
   url: https://www.thebrief.ai/pricing/
+- type: Plans
+  url: plans/thebrief-plans-pricing.yml
 - type: Support
   url: https://help.thebrief.ai/
 - type: GettingStarted
@@ -73,10 +140,46 @@ common:
   url: https://github.com/thebrief-ai
 - type: Login
   url: https://app.thebrief.ai/
+- type: SignUp
+  url: https://app.thebrief.ai/auth/create-account
 - type: LLMsTxt
   url: llms/thebrief-llms.txt
+- type: LLMsTxt
+  url: llms/thebrief-docs-llms.txt
+- type: DeveloperPortal
+  url: https://docs.thebrief.ai/
+- type: Documentation
+  url: https://docs.thebrief.ai/
+- type: APIReference
+  url: https://docs.thebrief.ai/public-api
+- type: Postman
+  url: https://www.postman.com/thebrieftechnical/the-brief-api/collection/1lfct1g/graphql-api
+- type: GraphQL
+  url: graphql/thebrief-public.graphql
+- type: Authentication
+  url: authentication/thebrief-authentication.yml
+- type: Conventions
+  url: conventions/thebrief-conventions.yml
+- type: ErrorCatalog
+  url: errors/thebrief-error-codes.yml
+- type: RateLimits
+  url: rate-limits/thebrief-rate-limits.yml
+- type: Webhooks
+  url: asyncapi/thebrief-webhooks.yml
+- type: DataModel
+  url: data-model/thebrief-data-model.yml
+- type: Lifecycle
+  url: lifecycle/thebrief-lifecycle.yml
+- type: Deprecation
+  url: lifecycle/thebrief-lifecycle.yml
+- type: Conformance
+  url: conformance/thebrief-conformance.yml
+- type: Components
+  url: components/thebrief-components.yml
+- type: AgentSkill
+  url: skills/_index.yml
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-12'
   status: enriched
-  artifacts_added: 4
+  artifacts_added: 19
   pass: local-v1

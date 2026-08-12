@@ -1,0 +1,57 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  Public package-registry searches and lookups plus the full Public API documentation
+  index at https://docs.thebrief.ai/llms.txt (57 pages).
+summary: >-
+  The Brief publishes NO first-party client libraries. This is a recorded absence, not an
+  unchecked field: npm, PyPI, RubyGems and the GitHub organisation were all queried on
+  2026-08-12 and none holds a The Brief / Creatopy SDK. The documentation teaches raw curl
+  against https://api.thebrief.ai/v1 and raw POSTs against the GraphQL endpoint; the only
+  library the docs ask you to install is the third-party Node.js `jsonwebtoken` package used
+  to sign auth and session tokens.
+package_count: 0
+official_sdk_count: 0
+packages: []
+
+registries_checked:
+  - {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=creatopy', result: 0 results}
+  - {registry: npm, query: 'https://registry.npmjs.org/-/v1/search?text=thebrief.ai', result: 0 results}
+  - {registry: npm, package: creatopy, status: 404}
+  - {registry: npm, package: '@creatopy/sdk', status: 404}
+  - {registry: npm, package: thebrief, status: 404}
+  - {registry: npm, package: '@thebrief/sdk', status: 404}
+  - {registry: npm, package: creatopy-sdk, status: 404}
+  - {registry: npm, package: creatopy-api, status: 404}
+  - {registry: npm, package: thebrief-sdk, status: 404}
+  - {registry: pypi, package: creatopy, status: 404}
+  - {registry: pypi, package: thebrief, status: 404}
+
+source_repositories:
+  - url: https://github.com/thebrief-ai
+    status: 200
+    public_repos: 0
+    note: >-
+      The GitHub organisation exists (login thebrief-ai, id 127532628) but lists zero public
+      repositories, so there is no source-distributed client either.
+  - url: https://github.com/creatopy
+    status: 404
+    note: No legacy Creatopy organisation under that name.
+
+third_party_dependencies_named_in_docs:
+  - name: jsonwebtoken
+    registry: npm
+    official: false
+    role: >-
+      Used in The Brief's own documented Node.js examples to sign the auth payload and the
+      App Integration session token. It is a general-purpose community library, not a The Brief
+      client — recorded here only so the dependency is not mistaken for a first-party SDK.
+
+alternative_client_surfaces:
+  - {name: Postman collection, url: 'https://www.postman.com/thebrieftechnical/the-brief-api/collection/1lfct1g/graphql-api', status: 200, official: true, note: 'The Brief''s own public Postman workspace (thebrieftechnical) — the closest thing to a shipped client.'}
+  - {name: Zapier app, url: 'https://zapier.com/developer/public-invite/171524/395880/e4a19ddb7cd42ee4a1865a84fd887187', official: true}
+  - {name: Figma plugin, official: true, evidence: 'ApiTokenScope FIGMA + figma* queries in the public GraphQL schema.'}
+
+note_on_pointer: >-
+  No `SDKs` or `Packages` pointer is emitted in apis.yml for this artifact — there is no SDK to
+  point at. The file exists to record the checked absence with its evidence.
