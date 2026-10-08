@@ -140,3 +140,41 @@ credits:
 
 cross_links:
   rate_limits: rate-limits/thebrief-rate-limits.yml
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  - negotiated
+  - seat
+  units:
+  - seat
+  plans:
+  - name: Create Pro
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Amplify Ultra
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Collaborate Team
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Scale Enterprise
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
